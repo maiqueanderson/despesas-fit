@@ -1,9 +1,24 @@
 .nav_link{
    
     text-decoration: none;
-    color: #ffffff;;
+    color: #ffffff;
+   
 }
 
 .nav_link:hover{
     color: #1c4733;
+}
+
+.logo{
+    
+    
+    padding-right: 300px;
+    
+    @media screen and (max-width: 968px) {
+        
+        margin-left: 8vw;
+        
+        padding-right: 0;
+      
+      } 
 }

@@ -9,22 +9,24 @@ import './Navigation.css';
 const Navigation = () =>{
     return(
             <Navbar bg="success" expand="lg">
-      <Container fluid>
-        <Navbar.Brand className="my-3 mx-5 p-3">
+      <Container  >
+        <Navbar.Brand className="logo" >
         <Link to='./'>
-        <img src={logo} height={80} className='d-inline-block align-top' alt='Anilox Design' />
+        <img src={logo} height={40} className='d-inline-block align-center logo' alt='Despesas FIT' />
         </Link>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
           <Nav
-            className="me-auto my-2 my-lg-0 mx-5"
+            
             style={{ maxHeight: '100px' }}
             navbarScroll
+            
           >
-            <Link className="mx-3 nav_link" to='./' >Sobre Nós</Link>
-            <Link className="mx-3 nav_link" to='./' >Serviços</Link>
-            <Link className="mx-3 nav_link" to='./' >Portfólio</Link>
+            <Link className="mx-3 nav_link" to='./' >visão geral</Link>
+            <Link className="mx-3 nav_link" to='./' >lançamentos</Link>
+            <Link className="mx-3 nav_link" to='./' >relatórios</Link>
+            <Link className="mx-3 nav_link" to='./' >metas</Link>
            
           
         

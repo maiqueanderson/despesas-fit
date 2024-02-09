@@ -1,0 +1,38 @@
+
+
+.header{
+    width: 80vw;
+    height: 200px;
+    
+  
+    
+    @media screen and (max-width: 968px) {
+        
+        margin: auto;
+        width: 90vw;
+        height: 500px;
+      
+      } 
+}
+
+.cadDespesa{
+  max-width: 20px;
+
+}
+
+.despesa{
+    background-color: #c32722;
+    color: white;
+    border-radius: 10px;
+    max-width: 200px;
+    max-height: 60px;
+    
+}
+
+.saldo{
+    background-color: #18d855;
+    color: white;
+    border-radius: 10px;
+    max-width: 200px;
+    max-height: 60px;
+}
