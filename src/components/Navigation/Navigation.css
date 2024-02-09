@@ -1,0 +1,9 @@
+.nav_link{
+   
+    text-decoration: none;
+    color: #ffffff;;
+}
+
+.nav_link:hover{
+    color: #1c4733;
+}
