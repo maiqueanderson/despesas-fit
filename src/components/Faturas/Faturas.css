@@ -1,0 +1,21 @@
+.carBody {
+    width: 400px;
+   
+
+    @media screen and (max-width: 968px) {
+
+        margin: auto;
+        width: 95vw;
+        
+
+    }
+}
+
+.titleText {
+    font-family: "Roboto", sans-serif;
+    font-weight: 700;
+}
+
+.ValueCredit{
+    color: crimson;
+}

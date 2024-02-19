@@ -1,0 +1,29 @@
+.cardBody {
+    width: 600px;
+   
+
+    @media screen and (max-width: 968px) {
+
+        margin: auto;
+        width: 95vw;
+        
+
+    }
+}
+
+.titleText{
+    font-family: "Roboto", sans-serif;
+        font-weight: 700;
+}
+
+.gastOver{
+    font-family: "Roboto", sans-serif;
+ 
+    color:crimson;
+}
+
+.gastInside{
+    font-family: "Roboto", sans-serif;
+   
+    color:#18d855;
+}

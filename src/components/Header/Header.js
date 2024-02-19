@@ -7,11 +7,11 @@ const Home = () => {
     return (
         <Container>
             <Card className="header my-3">
-                <Card.Body className="mx-5 cardInside">
+                <Card.Body className="mx-5">
 
                     <Row>
                         <Col xs={12} lg={4}>
-                            <div className="">
+                            <div>
                                 <Row>
                                     <p className="welcome mb-0">Bem Vindo</p>
                                 </Row>
