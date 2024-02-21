@@ -3,6 +3,8 @@ import './App.css';
 
 import Home from './pages/Home/Home';
 import Navigation from './components/Navigation/Navigation';
+import CadDespesa from './pages/CadDespesa/CadDespesa';
+import CadReceita from './pages/CadReceita/CadReceita';
 
 const App = () => {
   return (
@@ -11,6 +13,8 @@ const App = () => {
         <Navigation />
         <Routes>
           <Route path='/' element={<Home />} />
+          <Route path='/CadDespesas' element={<CadDespesa/>}/>
+          <Route path='/CadReceita' element={<CadReceita/>}/>
         </Routes>
       </Router>
     </div>

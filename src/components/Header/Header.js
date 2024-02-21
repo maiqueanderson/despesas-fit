@@ -2,6 +2,7 @@ import { Container, Card, Row, Col } from "react-bootstrap";
 import './Header.css'
 import despesaIcon from '../../assets/despesaIcon.png'
 import receitaIcon from '../../assets/receitaicon.png'
+import { Link } from "react-router-dom";
 
 const Home = () => {
     return (
@@ -61,15 +62,20 @@ const Home = () => {
                                 <Row>
                                     <Col>
 
-                                        <div className="cadDespesa">
-                                            <img src={despesaIcon} height={80} className='d-inline-block align-center mb-3' alt="despesaIcon" />
+                                        <div>
+                                            <Link to='./CadDespesas'>
+                                            
+                                            <img src={despesaIcon} height={80} className='cadDespesa d-inline-block align-center mb-3' alt="despesaIcon" />
+                                            </Link>
                                         </div>
                                     </Col>
 
                                     <Col>
 
-                                        <div className="cadReceita">
-                                            <img src={receitaIcon} height={80} className='d-inline-block align-center' alt="receitaIcon" />
+                                        <div>
+                                        <Link to='./CadReceita'>
+                                            <img src={receitaIcon} height={80} className='cadReceita d-inline-block align-center' alt="receitaIcon" />
+                                        </Link>    
                                         </div>
                                     </Col>
 

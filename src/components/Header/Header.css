@@ -64,12 +64,26 @@
 }
 
 .cadDespesa{
-  
+  transition: 1s;
   @media screen and (max-width: 968px) {
       
     padding-left: 12vw;
     
     } 
+}
+
+.cadDespesa:hover{
+
+  transform: scale(1.2);
+  
+}
+
+.cadReceita{
+  transition: 1s;
+}
+
+.cadReceita:hover{
+  transform: scale(1.2);
 }
 
 .despesa{

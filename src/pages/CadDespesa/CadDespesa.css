@@ -1,0 +1,29 @@
+.cardBody {
+    width: 600px;
+   
+
+    @media screen and (max-width: 968px) {
+
+        margin: auto;
+        width: 95vw;
+        
+
+    }
+}
+
+.despesaPage{
+
+   text-align: center;
+    
+}
+
+.titleD{
+    font-family: "Roboto", sans-serif;
+  font-weight: 700;
+  font-size: 25px;
+  color: #c32722;
+}
+
+.button{
+    width: 200px;
+}
