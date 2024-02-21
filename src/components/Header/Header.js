@@ -36,7 +36,7 @@ const Home = () => {
                                 <Row className="saldoGreen">
                                     <div className="saldo mt-3 mb-3">
                                         <Row className="text-center">
-                                            <h7>receita mensal</h7>
+                                            <h6>receita mensal</h6>
                                         </Row>
                                         <Row className="text-center">
                                             <h4>+ R$ 850,00</h4>
@@ -46,7 +46,7 @@ const Home = () => {
                                 <Row className="despesaRed">
                                     <div className="despesa mb-3">
                                         <Row className="text-center">
-                                            <h7>despesa mensal</h7>
+                                            <h6>despesa mensal</h6>
                                         </Row>
                                         <Row className="text-center">
                                             <h4>- R$ 350,00</h4>
