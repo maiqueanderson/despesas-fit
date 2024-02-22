@@ -1,0 +1,53 @@
+.bemvindo{
+    text-align: center;
+}
+
+.buttonL{
+    
+    text-align: center;
+}
+
+.LogoLogin{
+
+    text-align: center;
+     
+ }
+ 
+ .titleLogin{
+
+   font-family: "Roboto", sans-serif;
+   font-weight: 700;
+   font-size: 30px;
+   color: #408558;
+
+ 
+ }
+
+ .buttonLogin{
+    width: 260px;
+ }
+
+ .buttonCreate{
+    transition: 1s;
+    background-color: #EEF0EB;
+    border-color: #EEF0EB;
+    color: rgb(149, 149, 149);
+ }
+
+ .buttonCreate:hover{
+    background-color: #EEF0EB;
+    border-color: #EEF0EB;
+    color: rgb(58, 58, 58);
+    transform: scale(1.1);
+ }
+
+ .titleLogin{
+   font-family: "Roboto", sans-serif;
+   font-weight: 700;
+   font-size: 30px;
+   color: #393939;
+ }
+
+ .titleLogin2{
+   color: #408558;
+ }

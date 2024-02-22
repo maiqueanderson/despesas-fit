@@ -28,7 +28,7 @@ const UserCreate = () => {
             email,
             uid: auth.currentUser.uid,
           });
-          navigate("/Home"); // Redirecionar para a rota '/Home' após o cadastro bem-sucedido
+          navigate("/NewUser"); // Redirecionar para a rota '/NewUser' após o cadastro bem-sucedido
         } catch (err) {
           console.log("errDoc: ", err);
         }

@@ -1,7 +1,19 @@
 .footer{
-    background-color:#198754; ;
-    color: #fff;
-    text-align: center;
-    height: 150px;
     
+    background-color: white; ;
+    text-align: center;
+    height: 70px;
+    width: 100vw;
+    position: fixed;
+    bottom: 0px;
+    z-index: 1;
+    
+}
+
+.mais{
+    background-color: #408558;
+    border-radius: 30px;
+    color: white;
+    font-size: 30px;
+    padding: 5px;
 }

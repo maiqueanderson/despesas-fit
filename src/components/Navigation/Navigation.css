@@ -12,7 +12,7 @@
 .logo{
     
     
-    padding-right: 300px;
+    /* padding-right: 300px;
     
     @media screen and (max-width: 968px) {
         
@@ -20,5 +20,7 @@
         
         padding-right: 0;
       
-      } 
+      }  */
+
+      text-align: center;
 }

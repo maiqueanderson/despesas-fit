@@ -1,5 +1,11 @@
+.nav{
+  background-color: #408558;
+  height: 150px;
+}
 
-
+.cont{
+  margin-top: -120px;
+}
 .header{
     width: 80vw;
     height: 200px;
@@ -19,7 +25,7 @@
 .welcome{
   font-family: "Roboto", sans-serif;
   font-weight: 300;
-
+  color: #fff;
   @media screen and (max-width: 968px) {
       
     text-align: center;
@@ -32,6 +38,7 @@
   font-weight: 700;
   font-size: 30px;
   margin: 0;
+  color: #fff;
 
   @media screen and (max-width: 968px) {
       
@@ -82,7 +89,7 @@
 }
 
 .saldo{
-    background-color: #18d855;
+    background-color: #408558;
     color: white;
     border-radius: 10px;
     max-width: 200px;

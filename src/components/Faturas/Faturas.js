@@ -3,9 +3,9 @@ import './Faturas.css'
 
 const Faturas = () =>{
     return(
-        <Container className="cardBody py-3">
+        <Container className="cardBody py-3 mb-5 pb-5">
             <Card>
-                <Card.Body>
+                <Card.Body className="pb-5">
                     <Row>
                         <p className="titleText">Fatura cartão de crédito</p>
                     </Row>

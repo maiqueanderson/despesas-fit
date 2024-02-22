@@ -1,43 +1,16 @@
 
 
-.header{
-    width: 80vw;
-    height: 200px;
-    
-  
-    
-    @media screen and (max-width: 968px) {
-        
-        margin: auto;
-        width: 90vw;
-        height: 500px;
-      
-      } 
+.btnHeader{
+  background-color: white;
+  border-color: #408558;
+  color: #408558;
+  height: 50px;
 }
 
-
-.welcome{
-  font-family: "Roboto", sans-serif;
-  font-weight: 300;
-
-  @media screen and (max-width: 968px) {
-      
-    text-align: center;
-    
-    } 
-}
-
-.userName{
-  font-family: "Roboto", sans-serif;
-  font-weight: 700;
-  font-size: 30px;
-  margin: 0;
-
-  @media screen and (max-width: 968px) {
-      
-    text-align: center;
-    
-    } 
+.btnHeader:hover{
+  background-color: #408558;
+  color: white;
+  border-color: #408558;
 }
 
 .saldoGeral{
@@ -96,7 +69,7 @@
 }
 
 .saldo{
-    background-color: #18d855;
+    background-color: #408558;
     color: white;
     border-radius: 10px;
     max-width: 200px;

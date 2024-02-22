@@ -1,14 +1,30 @@
 
-import { Container } from 'react-bootstrap';
+import { Col, Container, Row } from 'react-bootstrap';
 import './Footer.css'
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faHouse } from '@fortawesome/free-solid-svg-icons'
 
 const Footer = () =>{
     return(
         <footer className="footer mt-5">
             <Container>
-
-                <p className="py-5">Desenvolvido por - Máique Anderson ©</p>
+                <Row>
+                    <Col>
+                    <FontAwesomeIcon icon={faHouse} />
+                    </Col>
+                    <Col>
+                        TRA
+                    </Col>
+                    <Col className='mais'>
+                        +
+                    </Col>
+                    <Col>
+                        REL
+                    </Col>
+                    <Col>
+                        MES
+                    </Col>
+                </Row>
             </Container>
            
         </footer>
