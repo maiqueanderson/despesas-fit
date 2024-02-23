@@ -2,29 +2,32 @@
 import { Col, Container, Row } from 'react-bootstrap';
 import './Footer.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faHouse } from '@fortawesome/free-solid-svg-icons'
+import { faHouse, faMoneyBillTransfer, faChartColumn, faCalendar } from '@fortawesome/free-solid-svg-icons'
 
 const Footer = () =>{
     return(
         <footer className="footer mt-5">
             <Container>
+                <div className='navFooter'>
+
                 <Row>
                     <Col>
-                    <FontAwesomeIcon icon={faHouse} />
+                    <FontAwesomeIcon className='iconF' color='#408558' icon={faHouse} />
                     </Col>
                     <Col>
-                        TRA
+                    <FontAwesomeIcon className='iconF' color='#606060' icon={faMoneyBillTransfer} />
                     </Col>
                     <Col className='mais'>
                         +
                     </Col>
                     <Col>
-                        REL
+                    <FontAwesomeIcon className='iconF' color='#606060' icon={faChartColumn} />
                     </Col>
                     <Col>
-                        MES
+                    <FontAwesomeIcon className='iconF' color='#606060' icon={faCalendar} />    
                     </Col>
                 </Row>
+                </div>
             </Container>
            
         </footer>

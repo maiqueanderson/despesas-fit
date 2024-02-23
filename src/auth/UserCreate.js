@@ -28,7 +28,37 @@ const UserCreate = () => {
             email,
             uid: auth.currentUser.uid,
           });
-          navigate("/NewUser"); // Redirecionar para a rota '/NewUser' após o cadastro bem-sucedido
+
+          const usersBank = collection(db, "bancos");
+          await setDoc(doc(usersBank, auth.currentUser.uid), {
+            name: 'exemplo',
+            saldoCorrente: '0,00',
+            saldoPoupanca: '0,00',
+            limiteCartao: '0,00',
+            uid: auth.currentUser.uid,
+          });
+
+          const usersReceita = collection(db, "receitas");
+          await setDoc(doc(usersReceita, auth.currentUser.uid), {
+            valor: '0,00',
+            categoria: 'Categoria Exemplo',
+            date: new Date(),
+            banco: 'Exemplo Banco',
+            tipoConta: 'Conta Corrente',
+            uid: auth.currentUser.uid,
+          });
+
+          const usersDespesa = collection(db, "despesas");
+          await setDoc(doc(usersDespesa, auth.currentUser.uid), {
+            valor: '0,00',
+            categoria: 'Categoria Exemplo',
+            date: new Date(),
+            banco: 'Exemplo Banco',
+            tipoConta: 'Conta Corrente',
+            uid: auth.currentUser.uid,
+          });
+
+          navigate("/Home"); // Redirecionar para a rota '/Home' após o cadastro bem-sucedido
         } catch (err) {
           console.log("errDoc: ", err);
         }

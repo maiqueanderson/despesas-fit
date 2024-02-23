@@ -15,5 +15,13 @@
     border-radius: 30px;
     color: white;
     font-size: 30px;
-    padding: 5px;
+    margin-top: -8px;
+}
+
+.navFooter{
+    padding: 20px 0
+}
+
+.iconF{
+    height: 22px;
 }
