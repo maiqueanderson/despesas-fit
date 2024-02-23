@@ -11,15 +11,12 @@ import {
 import { Container, Card, Row, Col, Button } from "react-bootstrap";
 import './Header.css'
 
-
 const Home = () => {
-     // eslint-disable-next-line
+    // eslint-disable-next-line
     const [user, setUser] = useState(null);
     const [totalCorrente, setTotalCorrente] = useState(0);
     const [totalReceitas, setTotalReceitas] = useState(0);
     const [totalDespesas, setTotalDespesas] = useState(0);
-
-    
 
     useEffect(() => {
         const auth = getAuth(app);
@@ -27,44 +24,50 @@ const Home = () => {
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
             if (user) {
                 setUser(user);
-                
+
+                // Obter o mês atual
+                const currentDate = new Date();
+                const currentMonth = currentDate.getMonth() + 1; // Os meses em JavaScript são baseados em zero, então somei 1 para obter o mês atual
 
                 // Consulta para obter todos os documentos da coleção "bancos"
                 const bancosCollectionRef = collection(db, "bancos");
                 const querySnapshot = await getDocs(query(bancosCollectionRef, where("uid", "==", user.uid)));
 
-                // Consulta para obter todos os documentos da coleção "receitas"
+                // Consulta para obter todas as receitas do mês atual
                 const receitasCollectionRef = collection(db, "receitas");
-                const querySnapshotReceitas = await getDocs(query(receitasCollectionRef, where("uid", "==", user.uid)));
+                const querySnapshotReceitas = await getDocs(query(receitasCollectionRef, 
+                    where("uid", "==", user.uid),
+                    where("date", ">=", new Date(currentDate.getFullYear(), currentMonth - 1, 1)),
+                    where("date", "<", new Date(currentDate.getFullYear(), currentMonth, 1))
+                ));
 
-                // Consulta para obter todos os documentos da coleção "despesas"
+                // Consulta para obter todas as despesas do mês atual
                 const despesasCollectionRef = collection(db, "despesas");
-                const querySnapshotDespesas = await getDocs(query(despesasCollectionRef, where("uid", "==", user.uid)));
-             
+                const querySnapshotDespesas = await getDocs(query(despesasCollectionRef, 
+                    where("uid", "==", user.uid),
+                    where("date", ">=", new Date(currentDate.getFullYear(), currentMonth - 1, 1)),
+                    where("date", "<", new Date(currentDate.getFullYear(), currentMonth, 1))
+                ));
 
                 let totalSaldoCorrente = 0;
                 querySnapshot.forEach((doc) => {
                     const data = doc.data();
-                    // Adiciona o saldoCorrente de cada documento ao total
                     totalSaldoCorrente += parseFloat(data.saldoCorrente);
                 });
 
                 let totalReceitas = 0;
                 querySnapshotReceitas.forEach((doc) => {
                     const data = doc.data();
-                    // Adiciona o saldoCorrente de cada documento ao total
                     totalReceitas += parseFloat(data.valor);
                 });
 
                 let totalDespesas = 0;
                 querySnapshotDespesas.forEach((doc) => {
                     const data = doc.data();
-                    // Adiciona o saldoCorrente de cada documento ao total
                     totalDespesas += parseFloat(data.valor);
                 });
 
-                
-                setTotalCorrente(totalSaldoCorrente)
+                setTotalCorrente(totalSaldoCorrente);
                 setTotalReceitas(totalReceitas);
                 setTotalDespesas(totalDespesas);
             }
