@@ -31,10 +31,11 @@ const UserCreate = () => {
 
           const usersBank = collection(db, "bancos");
           await setDoc(doc(usersBank, auth.currentUser.uid), {
-            name: 'exemplo',
+            name: 'Conta inicial',
             saldoCorrente: '0,00',
             saldoPoupanca: '0,00',
             limiteCartao: '0,00',
+            cor: '#408558',
             uid: auth.currentUser.uid,
           });
 

@@ -6,18 +6,20 @@ import {
     collection,
     query,
     where,
-  } from "firebase/firestore";
+} from "firebase/firestore";
 
 import { Card, Col, Container, Row } from "react-bootstrap";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCircleDot } from '@fortawesome/free-solid-svg-icons'
 import './ContaCorrente.css'
 
 const ContaCorrente = () => {
 
-      // eslint-disable-next-line
-      const [user, setUser] = useState(null);
+    // eslint-disable-next-line
+    const [user, setUser] = useState(null);
     const [bancos, setBancos] = useState([]);
 
-      useEffect(() => {
+    useEffect(() => {
         const auth = getAuth(app);
 
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -33,6 +35,7 @@ const ContaCorrente = () => {
                 const bancosData = querySnapshot.docs.map(doc => ({
                     name: doc.data().name,
                     saldoCorrente: doc.data().saldoCorrente,
+                    cor: doc.data().cor
                 }));
 
                 setBancos(bancosData);
@@ -45,24 +48,32 @@ const ContaCorrente = () => {
 
     return (
         <Container className="cardBody mb-3">
-        <Card>
-            <Card.Body>
-                <Row>
-                    <p className="titleText">Conta Corrente</p>
-                </Row>
-                {bancos.map((banco, index) => (
-                    <Row key={index}>
-                        <Col xs={8}>
-                            <p>{banco.name}</p>
-                        </Col>
-                        <Col xs={4}>
-                            <p className="ValueText">R$ {banco.saldoCorrente}</p>
-                        </Col>
+            <Card>
+                <Card.Body>
+                    <Row>
+                        <p className="titleText">Conta Corrente</p>
                     </Row>
-                ))}
-            </Card.Body>
-        </Card>
-    </Container>
+                    {bancos.map((banco, index) => (
+                        <Row key={index}>
+                            <Col xs={2}>
+                                <FontAwesomeIcon
+                                    className='iconF'
+                                    color={banco.cor}
+                                    icon={faCircleDot}
+
+                                />
+                            </Col>
+                            <Col xs={6}>
+                                <p>{banco.name}</p>
+                            </Col>
+                            <Col xs={4}>
+                            <p className="ValueText">R$ {parseFloat(banco.saldoCorrente).toFixed(2)}</p>
+                            </Col>
+                        </Row>
+                    ))}
+                </Card.Body>
+            </Card>
+        </Container>
     )
 }
 

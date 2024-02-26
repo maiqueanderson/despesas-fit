@@ -10,6 +10,7 @@ import {
   
 import { Container, Card, Row, Col, Button } from "react-bootstrap";
 import './Header.css'
+import { Link } from "react-router-dom";
 
 const Home = () => {
     // eslint-disable-next-line
@@ -91,7 +92,7 @@ const Home = () => {
                                     <p className="mb-0 mt-3 saldoGeral">saldo geral</p>
                                 </Row>
                                 <Row>
-                                    <p className="userSaldo">R$ {totalCorrente}</p>
+                                    <p className="userSaldo">R$ {parseFloat(totalCorrente).toFixed(2)}</p>
                                 </Row>
                               
                             </div>
@@ -105,7 +106,8 @@ const Home = () => {
                                             <h6 className="my-1">receita mensal</h6>
                                         </Row>
                                         <Row className="text-center">
-                                            <h4>+ R$ {totalReceitas}</h4>
+                                          
+                                            <h4>+ R$ {parseFloat(totalReceitas).toFixed(2)}</h4>
                                         </Row>
                                     </div>
                                 </Row>
@@ -115,7 +117,8 @@ const Home = () => {
                                             <h6 className="my-1">despesa mensal</h6>
                                         </Row>
                                         <Row className="text-center">
-                                            <h4>- R$ {totalDespesas}</h4>
+
+                                            <h4>- R$ {parseFloat(totalDespesas).toFixed(2)}</h4>
                                         </Row>
                                     </div>
                                 </Row>
@@ -123,10 +126,12 @@ const Home = () => {
                         </Col>
 
                         <Col xs={12} lg={4}>
-                            <div>
+                            <div className="btnText">
                                 
                                 <Row>
+                                    <Link to='/GerenciarContas'>   
                                    <Button className="btnHeader">Gerenciar Contas</Button> 
+                                    </Link>
                                 </Row>
                             </div>
                         </Col>

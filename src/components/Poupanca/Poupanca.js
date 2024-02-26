@@ -9,6 +9,8 @@ import {
   } from "firebase/firestore";
 
 import { Card, Col, Container, Row } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCircleDot } from '@fortawesome/free-solid-svg-icons'
 import './Poupanca.css'
 
 const Poupanca = () =>{
@@ -36,6 +38,7 @@ const Poupanca = () =>{
                     .map(doc => ({
                         name: doc.data().name,
                         saldoPoupanca: doc.data().saldoPoupanca,
+                        cor: doc.data().cor,
                     }));
 
                 setBancos(bancosData);
@@ -47,7 +50,7 @@ const Poupanca = () =>{
     }, []);
 
     return(
-       <Container className='cardBody mb-3'>
+       <Container className='cardBody'>
         <Card>
             <Card.Body >
             <Row>
@@ -55,11 +58,19 @@ const Poupanca = () =>{
                 </Row>
                 {bancos.map((banco, index) => (
                     <Row key={index}>
-                        <Col xs={8}>
+                         <Col xs={2}>
+                                <FontAwesomeIcon
+                                    className='iconF'
+                                    color={banco.cor}
+                                    icon={faCircleDot}
+
+                                />
+                            </Col>
+                        <Col xs={6}>
                             <p>{banco.name}</p>
                         </Col>
-                        <Col xs={4}>
-                            <p className="textPoup">R$ {banco.saldoPoupanca}</p>
+                        <Col xs={4}>      
+                            <p className="textPoup">R$ {parseFloat(banco.saldoPoupanca).toFixed(2)}</p>
                         </Col>
                     </Row>
                 ))}

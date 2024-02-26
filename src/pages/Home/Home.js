@@ -10,7 +10,7 @@ import {
 import Header from "../../components/Header/Header"
 import Popupanca from "../../components/Poupanca/Poupanca"
 import ContaCorrente from '../../components/ContaCorrente/ContaCorrente'
-import LimitesCartao from '../../components/LimitesCartao/LimitesCartao'
+// import LimitesCartao from '../../components/LimitesCartao/LimitesCartao'
 import Footer from "../../components/Footer/Footer"
 import MaioresGastos from "../../components/MaioresGastos/MaioresGastos"
 import Metas from '../../components/Metas/Metas'
@@ -87,9 +87,9 @@ const Home = () => {
                             <ContaCorrente />
                         </Row>
                         <Popupanca />
-                        <Row>
+                        {/* <Row>
                             <LimitesCartao />
-                        </Row>
+                        </Row> */}
 
                         <Row>
 

@@ -11,6 +11,42 @@
     }
 }
 
+.nav3{
+    background-color: #408558;
+    height: 100px;
+    
+  }
+
+.navCard{
+    margin: auto;
+    text-decoration: none;
+    color: white;
+    font-weight: 700;
+}
+
+.navCard:focus{
+    color: white;
+}
+
+.navCard:hover{
+    color: #621513;
+}
+
+.navCard2{
+    margin: auto;
+    text-decoration: none;
+    
+    color: white;
+    font-weight: 300;
+}
+
+.navCard2:focus{
+    color: #621513;;
+}
+
+.navCard2:hover{
+    color: #621513;;
+}
 .despesaPage{
 
    text-align: center;

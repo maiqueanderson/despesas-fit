@@ -5,12 +5,18 @@
   border-color: #408558;
   color: #408558;
   height: 50px;
+  width: 200px;
+  
 }
 
 .btnHeader:hover{
   background-color: #408558;
   color: white;
   border-color: #408558;
+}
+
+.btnText{
+  text-align: center;
 }
 
 .saldoGeral{

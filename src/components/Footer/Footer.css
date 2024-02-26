@@ -16,6 +16,17 @@
     color: white;
     font-size: 30px;
     margin-top: -8px;
+    
+}
+
+.textMais{
+    text-decoration: none;
+    color: white;
+}
+
+.textMais:focus{
+    text-decoration: none;
+    color: white;
 }
 
 .navFooter{

@@ -1,16 +1,32 @@
-import { Button, Card, Container, Form } from "react-bootstrap";
+import { Button, Card, Container, Form, Row, Col } from "react-bootstrap";
 import Footer from "../../components/Footer/Footer";
-
+import { Link } from "react-router-dom";
 import './CadReceita.css'
 import receitaPage from '../../assets/receitaPage.png'
 
 const CadReceita = () => {
     return (
         <>
-        
-        <Container className="cardBody pb-3">
+         <div className="nav3">          
+        <Row className=" navCard">
+               
+               <Col className="mt-3 mx-5" >
+               <Link to='/CadDespesas' className="navCard2">
+                   DESPESA
+               </Link>
+               </Col>
 
-            <Card className="my-5">
+               <Col className="mt-3 mx-5">
+               <Link to='/CadReceita' className="navCard">
+                  RECEITA
+               </Link>
+               </Col>
+           </Row> 
+              </div>
+
+         <Container className="cardBody">
+
+            <Card className="cardDespesa">
                 <Card.Body>
                     <div className="despesaPage">
                         <img src={receitaPage} height={80} alt="despesaPage" />

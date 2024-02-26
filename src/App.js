@@ -8,6 +8,7 @@ import CadDespesa from './pages/CadDespesa/CadDespesa';
 import CadReceita from './pages/CadReceita/CadReceita';
 import Login from './auth/Login';
 import UserCreate from './auth/UserCreate';
+import GerenciarContas from "./pages/GerenciarContas/GerenciarContas";
 
 
 const App = () => {
@@ -21,6 +22,7 @@ const App = () => {
           <Route path='/CadDespesas' element={<CadDespesa/>}/>
           <Route path='/CadReceita' element={<CadReceita/>}/>
           <Route path='/UserCreate' element={<UserCreate />} />
+          <Route path='/GerenciarContas' element={<GerenciarContas />} />
          
         </Routes>
       </Router>
