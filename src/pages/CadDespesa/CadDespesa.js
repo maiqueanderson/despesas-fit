@@ -50,53 +50,66 @@ const CadDespesa = () => {
         const bancoSelect = document.getElementById("BancosDespesa").value;
         const tipoCompraSelect = document.getElementById("TipoDeCompra").value;
         const valorInput = document.getElementById("valorDinheiro").value;
-
+    
         if (!categoriaSelect || !bancoSelect || !tipoCompraSelect || !valorInput) return;
-
+    
         try {
-            // Adicionar despesa à coleção despesas
-            const despesasCollectionRef = collection(db, "despesas");
-            await addDoc(despesasCollectionRef, {
-                categoria: categoriaSelect,
-                banco: bancoSelect,
-                tipoConta: tipoCompraSelect,
-                date: new Date(),
-                valor: valorInput,
-                uid: user.uid,
-            });
-
-            // Subtrair o valor da despesa do saldoCorrente do banco selecionado
-            const bancosCollectionRef = collection(db, "bancos");
-            const bancosQuery = query(bancosCollectionRef, where("name", "==", bancoSelect));
-            const bancosSnapshot = await getDocs(bancosQuery);
-
-            if (!bancosSnapshot.empty) {
-                // Verifica se a coleção não está vazia
-                const bancoDoc = bancosSnapshot.docs[0];
-                const saldoCorrenteAtual = bancoDoc.data().saldoCorrente;
-                const novoSaldoCorrente = saldoCorrenteAtual - parseFloat(valorInput);
-            
-                // Atualizar o saldoCorrente no banco selecionado
-                await updateDoc(bancoDoc.ref, {
-                    saldoCorrente: novoSaldoCorrente,
+            // Consultar o documento da categoria selecionada para obter a cor
+            const catQuery = query(collection(db, "categorias"), where("name", "==", categoriaSelect));
+            const catSnapshot = await getDocs(catQuery);
+    
+            if (!catSnapshot.empty) {
+                const categoriaData = catSnapshot.docs[0].data();
+                const cor = categoriaData.cor;
+    
+                // Adicionar despesa à coleção despesas
+                const despesasCollectionRef = collection(db, "despesas");
+                await addDoc(despesasCollectionRef, {
+                    categoria: categoriaSelect,
+                    banco: bancoSelect,
+                    tipoConta: tipoCompraSelect,
+                    date: new Date(),
+                    valor: valorInput,
+                    uid: user.uid,
+                    cor: cor, // Adiciona a cor obtida da categoria
                 });
-            
-                console.log("Despesa adicionada com sucesso!");
-                
-                // Limpar os campos após a adição
-                document.getElementById("CategoriaDespesa").value = "";
-                document.getElementById("BancosDespesa").value = "";
-                document.getElementById("TipoDeCompra").value = "Debito";
-                document.getElementById("valorDinheiro").value = "";
-
-                navigate("/Home");
+    
+                // Subtrair o valor da despesa do saldoCorrente do banco selecionado
+                const bancosCollectionRef = collection(db, "bancos");
+                const bancosQuery = query(bancosCollectionRef, where("name", "==", bancoSelect));
+                const bancosSnapshot = await getDocs(bancosQuery);
+    
+                if (!bancosSnapshot.empty) {
+                    // Verifica se a coleção não está vazia
+                    const bancoDoc = bancosSnapshot.docs[0];
+                    const saldoCorrenteAtual = bancoDoc.data().saldoCorrente;
+                    const novoSaldoCorrente = saldoCorrenteAtual - parseFloat(valorInput);
+    
+                    // Atualizar o saldoCorrente no banco selecionado
+                    await updateDoc(bancoDoc.ref, {
+                        saldoCorrente: novoSaldoCorrente,
+                    });
+    
+                    console.log("Despesa adicionada com sucesso!");
+    
+                    // Limpar os campos após a adição
+                    document.getElementById("CategoriaDespesa").value = "";
+                    document.getElementById("BancosDespesa").value = "";
+                    document.getElementById("TipoDeCompra").value = "Debito";
+                    document.getElementById("valorDinheiro").value = "";
+    
+                    navigate("/Home");
+                } else {
+                    console.error("Documento de banco não encontrado no Firestore.");
+                }
             } else {
-                console.error("Documento de banco não encontrado no Firestore.");
+                console.error("Documento de categoria não encontrado no Firestore.");
             }
         } catch (error) {
             console.error("Erro ao adicionar despesa:", error);
         }
     };
+    
 
 
     useEffect(() => {
