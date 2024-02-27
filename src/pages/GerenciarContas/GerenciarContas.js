@@ -208,11 +208,11 @@ const GerenciarContas = () => {
                     <Card.Body className="my-3">
                         <h5>Bancos cadastrados</h5>
                         <Row className="py-3">
-                            <Col>
+                            <Col xs={1}>
                                 {bancos.map((banco, indexI) => (
                                     <div className="my-3" key={indexI}>
                                         <FontAwesomeIcon
-                                            className='iconF'
+                                            
                                             color={banco.cor}
                                             icon={faCircleDot}
                                         />
@@ -220,21 +220,22 @@ const GerenciarContas = () => {
                                 ))}
                             </Col>
 
-                            <Col>
+                            <Col xs={5}>
                                 {bancos.map((banco, index) => (
                                     <div className="my-3" key={index}>{banco.name}</div>
                                 ))}
                             </Col>
-                            <Col>
+                            <Col xs={4}>
                                 {bancos.map((banco, index2) => (
-                                    <div className="my-3" key={index2}>{banco.saldoCorrente}</div>
+                                    <div className="my-3" key={index2}>R$ {banco.saldoCorrente.toFixed(2)}</div>
+                                    
                                 ))}
                             </Col>
-                            <Col>
+                            <Col xs={1}>
                                 {bancos.map((banco, index3) => (
                                     <div className="my-3" key={index3}>
                                         <FontAwesomeIcon
-                                            className='iconF'
+                                           
                                             color='#606060'
                                             icon={faPenToSquare}
                                             onClick={() => handleEditBank(banco)}
@@ -242,11 +243,11 @@ const GerenciarContas = () => {
                                     </div>
                                 ))}
                             </Col>
-                            <Col>
+                            <Col xs={1}>
                                 {bancos.map((banco, index4) => (
                                     <div className="my-3" key={index4}>
                                         <FontAwesomeIcon
-                                            className='iconF'
+                                            
                                             color='#c32722'
                                             icon={faTrash}
                                             onClick={() => handleDeleteBank(banco)}

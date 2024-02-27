@@ -8,16 +8,16 @@ import {
     where,
 } from "firebase/firestore";
 
-import { Card, Col, Container, Row, Button } from 'react-bootstrap';
+import { Button, Card, Col, Container, Row } from "react-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCircleDot } from '@fortawesome/free-solid-svg-icons'
-import './Poupanca.css'
+import { faCircle } from '@fortawesome/free-solid-svg-icons'
+import './ContasAPagar.css'
 
-const Poupanca = () => {
+const ContaCorrente = () => {
 
     // eslint-disable-next-line
     const [user, setUser] = useState(null);
-    const [bancos, setBancos] = useState([]);
+    const [paraPagar, setParaPagar] = useState([]);
 
     useEffect(() => {
         const auth = getAuth(app);
@@ -27,21 +27,18 @@ const Poupanca = () => {
                 setUser(user);
 
                 // Consulta para obter todos os documentos da coleção "bancos" onde UID é igual ao UID do usuário
-                const bancosCollectionRef = collection(db, "bancos");
-                const q = query(bancosCollectionRef, where("uid", "==", user.uid));
+                const paraPagarCollectionRef = collection(db, "paraPagar");
+                const q = query(paraPagarCollectionRef, where("uid", "==", user.uid));
                 const querySnapshot = await getDocs(q);
 
                 // Mapear os documentos e extrair nomeBanco e saldoBanco
+                const paraPagarData = querySnapshot.docs.map(doc => ({
+                    despesaName: doc.data().despesaName,
+                    valor: doc.data().valor,
+                    cor: doc.data().cor
+                }));
 
-                const bancosData = querySnapshot.docs
-                    .filter(doc => parseFloat(doc.data().saldoPoupanca) > 0)
-                    .map(doc => ({
-                        name: doc.data().name,
-                        saldoPoupanca: doc.data().saldoPoupanca,
-                        cor: doc.data().cor,
-                    }));
-
-                setBancos(bancosData);
+                setParaPagar(paraPagarData);
             }
         });
 
@@ -50,33 +47,33 @@ const Poupanca = () => {
     }, []);
 
     return (
-        <Container className='cardBody'>
+        <Container className="cardBody mt-3">
             <Card>
-                <Card.Body >
+                <Card.Body>
                     <Row>
-                        <p className="titleText">Poupança</p>
+                        <p className="titleText">Contas à pagar</p>
                     </Row>
-                    {bancos.map((banco, index) => (
+                    {paraPagar.map((paraPagar, index) => (
                         <Row key={index}>
                             <Col xs={2}>
                                 <FontAwesomeIcon
                                     className='iconF'
-                                    color={banco.cor}
-                                    icon={faCircleDot}
+                                    color={paraPagar.cor}
+                                    icon={faCircle}
 
                                 />
                             </Col>
                             <Col xs={6}>
-                                <p>{banco.name}</p>
+                                <p>{paraPagar.despesaName}</p>
                             </Col>
                             <Col xs={4}>
-                                <p className="textPoup">R$ {parseFloat(banco.saldoPoupanca).toFixed(2)}</p>
+                            <p className="ValueText">R$ {parseFloat(paraPagar.valor).toFixed(2)}</p>
                             </Col>
                         </Row>
                     ))}
                     <div className="btnConta my-3">
 
-                        <Button variant="outline-success">Adicionar dinheiro a poupança</Button>
+                    <Button variant="outline-success">Pagar Contas</Button>
                     </div>
                 </Card.Body>
             </Card>
@@ -84,4 +81,4 @@ const Poupanca = () => {
     )
 }
 
-export default Poupanca;
+export default ContaCorrente;

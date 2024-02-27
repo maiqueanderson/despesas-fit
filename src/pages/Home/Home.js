@@ -15,6 +15,7 @@ import Footer from "../../components/Footer/Footer"
 import MaioresGastos from "../../components/MaioresGastos/MaioresGastos"
 import Metas from '../../components/Metas/Metas'
 import Faturas from "../../components/Faturas/Faturas"
+import ContasAPagar from "../../components/ContasAPagar/ContasAPagar"
 import { Col, Container, Row } from "react-bootstrap"
 
 import './Home.css'
@@ -87,9 +88,9 @@ const Home = () => {
                             <ContaCorrente />
                         </Row>
                         <Popupanca />
-                        {/* <Row>
-                            <LimitesCartao />
-                        </Row> */}
+                        <Row>
+                            <ContasAPagar/>
+                        </Row>
 
                         <Row>
 

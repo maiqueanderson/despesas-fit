@@ -17,13 +17,20 @@ const CadDespesa = () => {
 
     const navigate = useNavigate();
 
+    // Adicione um estado para controlar se a despesa está paga
+    const [despesaPaga, setDespesaPaga] = useState(true); // Padrão: despesa paga
+
+    // Função para lidar com a mudança de estado do switch
+    const handleSwitchChange = () => {
+        setDespesaPaga(!despesaPaga); // Inverte o estado atual
+    };
+
     // eslint-disable-next-line
     const [user, setUser] = useState(null);
     // eslint-disable-next-line
     const [userData, setUserData] = useState(null);
     const [categorias, setCategorias] = useState([]);
     const [bancos, setBancos] = useState([]);
-
 
     const [catName, setCatName] = useState('');
     const [catCor, setCatCor] = useState('');
@@ -50,6 +57,7 @@ const CadDespesa = () => {
         const bancoSelect = document.getElementById("BancosDespesa").value;
         const tipoCompraSelect = document.getElementById("TipoDeCompra").value;
         const valorInput = document.getElementById("valorDinheiro").value;
+        const despesaName = document.getElementById("nomeDespesa").value || "Despesa sem nome"; // Define o nome padrão como "despesa sem nome" se não houver nenhum nome
     
         if (!categoriaSelect || !bancoSelect || !tipoCompraSelect || !valorInput) return;
     
@@ -62,46 +70,67 @@ const CadDespesa = () => {
                 const categoriaData = catSnapshot.docs[0].data();
                 const cor = categoriaData.cor;
     
-                // Adicionar despesa à coleção despesas
-                const despesasCollectionRef = collection(db, "despesas");
-                await addDoc(despesasCollectionRef, {
-                    categoria: categoriaSelect,
-                    banco: bancoSelect,
-                    tipoConta: tipoCompraSelect,
-                    date: new Date(),
-                    valor: valorInput,
-                    uid: user.uid,
-                    cor: cor, // Adiciona a cor obtida da categoria
-                });
-    
-                // Subtrair o valor da despesa do saldoCorrente do banco selecionado
-                const bancosCollectionRef = collection(db, "bancos");
-                const bancosQuery = query(bancosCollectionRef, where("name", "==", bancoSelect));
-                const bancosSnapshot = await getDocs(bancosQuery);
-    
-                if (!bancosSnapshot.empty) {
-                    // Verifica se a coleção não está vazia
-                    const bancoDoc = bancosSnapshot.docs[0];
-                    const saldoCorrenteAtual = bancoDoc.data().saldoCorrente;
-                    const novoSaldoCorrente = saldoCorrenteAtual - parseFloat(valorInput);
-    
-                    // Atualizar o saldoCorrente no banco selecionado
-                    await updateDoc(bancoDoc.ref, {
-                        saldoCorrente: novoSaldoCorrente,
+                // Verificar se a despesa está paga
+                if (despesaPaga) {
+                    // Adicionar despesa à coleção despesas
+                    const despesasCollectionRef = collection(db, "despesas");
+                    await addDoc(despesasCollectionRef, {
+                        categoria: categoriaSelect,
+                        despesaName: despesaName,
+                        banco: bancoSelect,
+                        tipoConta: tipoCompraSelect,
+                        date: new Date(),
+                        valor: valorInput,
+                        uid: user.uid,
+                        cor: cor, // Adiciona a cor obtida da categoria
+                        status: "pago"
                     });
     
-                    console.log("Despesa adicionada com sucesso!");
+                    // Subtrair o valor da despesa do saldoCorrente do banco selecionado
+                    const bancosCollectionRef = collection(db, "bancos");
+                    const bancosQuery = query(bancosCollectionRef, where("name", "==", bancoSelect));
+                    const bancosSnapshot = await getDocs(bancosQuery);
     
-                    // Limpar os campos após a adição
-                    document.getElementById("CategoriaDespesa").value = "";
-                    document.getElementById("BancosDespesa").value = "";
-                    document.getElementById("TipoDeCompra").value = "Debito";
-                    document.getElementById("valorDinheiro").value = "";
+                    if (!bancosSnapshot.empty) {
+                        // Verifica se a coleção não está vazia
+                        const bancoDoc = bancosSnapshot.docs[0];
+                        const saldoCorrenteAtual = bancoDoc.data().saldoCorrente;
+                        const novoSaldoCorrente = saldoCorrenteAtual - parseFloat(valorInput);
     
-                    navigate("/Home");
+                        // Atualizar o saldoCorrente no banco selecionado
+                        await updateDoc(bancoDoc.ref, {
+                            saldoCorrente: novoSaldoCorrente,
+                        });
+    
+                        console.log("Despesa paga adicionada com sucesso!");
+                    } else {
+                        console.error("Documento de banco não encontrado no Firestore.");
+                    }
                 } else {
-                    console.error("Documento de banco não encontrado no Firestore.");
+                    // Adicionar à coleção paraPagar
+                    const paraPagarCollectionRef = collection(db, "paraPagar");
+                    await addDoc(paraPagarCollectionRef, {
+                        categoria: categoriaSelect,
+                        despesaName: despesaName,
+                        banco: bancoSelect,
+                        tipoConta: tipoCompraSelect,
+                        date: new Date(),
+                        valor: valorInput,
+                        uid: user.uid,
+                        cor: cor, // Adiciona a cor obtida da categoria
+                    });
+    
+                    console.log("Despesa não paga adicionada à coleção paraPagar com sucesso!");
                 }
+    
+                // Limpar os campos após a adição
+                document.getElementById("CategoriaDespesa").value = "";
+                document.getElementById("BancosDespesa").value = "";
+                document.getElementById("TipoDeCompra").value = "Debito";
+                document.getElementById("valorDinheiro").value = "";
+                document.getElementById("nomeDespesa").value = ""; // Limpar o campo nomeDespesa
+    
+                navigate("/Home");
             } else {
                 console.error("Documento de categoria não encontrado no Firestore.");
             }
@@ -110,6 +139,8 @@ const CadDespesa = () => {
         }
     };
     
+    
+
 
 
     useEffect(() => {
@@ -206,6 +237,12 @@ const CadDespesa = () => {
 
                         <Form>
                             <Form.Group className="mb-3" controlId="CategoriaDespesa">
+
+                            <Form.Group className="my-3" controlId="nomeDespesa">
+                                <Form.Label>Nome da despesa:</Form.Label>
+                                <Form.Control type="text" placeholder="Nome opcional" />
+                            </Form.Group>
+
                                 <Form.Label>Categoria:</Form.Label>
                                 <Form.Select>
 
@@ -243,6 +280,16 @@ const CadDespesa = () => {
                                 <Form.Label>Valor:</Form.Label>
                                 <Form.Control type="number" placeholder="R$ 00,00" />
                             </Form.Group>
+
+                            <Form.Check
+                                className="py-3"
+                                type="switch"
+                                id="pago"
+                                label="Despesa Paga"
+                                defaultChecked={despesaPaga} // Define o estado inicial com base no estado despesaPaga
+                                onChange={handleSwitchChange} // Função para lidar com a mudança de estado
+                            />
+
                         </Form>
                         <div className="despesaPage">
                             <Button className="button" variant="danger" onClick={handleAddDespesa}>
