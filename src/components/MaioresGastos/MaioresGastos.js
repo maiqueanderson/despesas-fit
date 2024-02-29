@@ -16,6 +16,7 @@ const MaioresGastos = () => {
 
     const [catName, setCatName] = useState('');
     const [catCor, setCatCor] = useState('');
+    const [catMeta, setCatMeta] = useState('');
 
     const [user, setUser] = useState(null);
     // eslint-disable-next-line
@@ -24,13 +25,14 @@ const MaioresGastos = () => {
     const [categorias, setCategorias] = useState([]);
 
     const handleAddCategory = async () => {
-        if (!catName || !catCor) return;
+        if (!catName || !catCor || !catMeta) return;
 
         try {
             const categoriasCollectionRef = collection(db, "categorias");
             await addDoc(categoriasCollectionRef, {
                 name: catName,
                 cor: catCor,
+                meta: catMeta,
                 uid: user.uid,
             });
 
@@ -191,6 +193,17 @@ const MaioresGastos = () => {
                                 onChange={(e) => setCatName(e.target.value)}
                             />
                         </Form.Group>
+
+                        <Form.Group className="mb-3" controlId="editBank.ControlMeta">
+                            <Form.Label>Meta de gastos mensal</Form.Label>
+                            <Form.Control
+                                type="number"
+                                placeholder="R$ 00,00"
+                                value={catMeta}
+                                onChange={(e) => setCatMeta(e.target.value)}
+                            />
+                        </Form.Group>
+
                         <Form.Label htmlFor="exampleColorInput">Escolha a cor da categoria</Form.Label>
                         <Form.Control
                             type="color"

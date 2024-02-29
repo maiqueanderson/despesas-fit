@@ -49,38 +49,47 @@ const ContaCorrente = () => {
 
     return (
         <Container className="cardBody mt-3">
-            <Card>
-                <Card.Body>
+        <Card>
+            <Card.Body>
+                <Row>
+                    <p className="titleText">Contas à pagar</p>
+                </Row>
+                {paraPagar.length === 0 ? (
                     <Row>
-                        <p className="titleText">Contas à pagar</p>
+                        <Col>
+                        <div>
+
+                            <p className="btnConta">Sem contas para pagar</p>
+                        </div>
+                        </Col>
                     </Row>
-                    {paraPagar.map((paraPagar, index) => (
+                ) : (
+                    paraPagar.map((paraPagar, index) => (
                         <Row key={index}>
                             <Col xs={2}>
                                 <FontAwesomeIcon
                                     className='iconF'
                                     color={paraPagar.cor}
                                     icon={faCircle}
-
                                 />
                             </Col>
                             <Col xs={6}>
                                 <p>{paraPagar.despesaName}</p>
                             </Col>
                             <Col xs={4}>
-                            <p className="ValueText">R$ {parseFloat(paraPagar.valor).toFixed(2)}</p>
+                                <p className="ValueText">R$ {parseFloat(paraPagar.valor).toFixed(2)}</p>
                             </Col>
                         </Row>
-                    ))}
-                    <div className="btnConta my-3">
+                    ))
+                )}
+                <div className="btnConta my-3">
                     <Link to='/PagarContas'>
-                    
-                    <Button variant="outline-success">Pagar Contas</Button>
+                        <Button variant="outline-success">Pagar Contas</Button>
                     </Link>
-                    </div>
-                </Card.Body>
-            </Card>
-        </Container>
+                </div>
+            </Card.Body>
+        </Card>
+    </Container>
     )
 }
 

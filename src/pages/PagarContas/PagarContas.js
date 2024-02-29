@@ -187,7 +187,8 @@ const PagarContas = () => {
                                             
                                         }
                                     }}
-                                >
+                                >   
+                                    <option>Selecione uma conta</option>
                                     {contas.map((conta) => (
                                         <option key={conta.id} value={conta.despesaName}>
                                             {conta.despesaName} - R$ {conta.valor}
@@ -201,7 +202,8 @@ const PagarContas = () => {
                                 <Form.Select
                                     value={bancoSelect}
                                     onChange={(e) => setBancoSelect(e.target.value)}
-                                >
+                                >   
+                                    <option>Selecione um banco</option>
                                     {bancos.map((bancos) => (
                                         <option key={bancos.id} value={bancos.name}>
                                             {bancos.name}

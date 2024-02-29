@@ -208,6 +208,7 @@ const CadReceita = () => {
                                     value={categoriaSelect}
                                     onChange={(e) => setCategoriaSelect(e.target.value)}
                                 >
+                                    <option>Selecione uma categoria</option>
                                     {categorias.map((categoria) => (
                                         <option key={categoria.id} value={categoria.name}>
                                             {categoria.name}
@@ -221,7 +222,8 @@ const CadReceita = () => {
                                 <Form.Select
                                     value={bancoSelect}
                                     onChange={(e) => setBancoSelect(e.target.value)}
-                                >
+                                >   
+                                <option>Selecione um banco</option>
                                     {bancos.map((bancos) => (
                                         <option key={bancos.id} value={bancos.name}>
                                             {bancos.name}

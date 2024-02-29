@@ -14,6 +14,7 @@ const CadDespesa = () => {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+    
 
     const navigate = useNavigate();
 
@@ -53,9 +54,9 @@ const CadDespesa = () => {
     };
 
     const handleAddDespesa = async () => {
-        const categoriaSelect = document.getElementById("CategoriaDespesa").value;
-        const bancoSelect = document.getElementById("BancosDespesa").value;
-        const tipoCompraSelect = document.getElementById("TipoDeCompra").value;
+        const categoriaSelect = document.getElementById("CategoriaDespesa").value || "Sem categoria";
+        const bancoSelect = document.getElementById("BancosDespesa").value || "Sem banco";
+        const tipoCompraSelect = document.getElementById("TipoDeCompra").value || "Debito";
         const valorInput = document.getElementById("valorDinheiro").value;
         const despesaName = document.getElementById("nomeDespesa").value || "Despesa sem nome"; // Define o nome padrão como "despesa sem nome" se não houver nenhum nome
     
@@ -245,7 +246,7 @@ const CadDespesa = () => {
 
                                 <Form.Label>Categoria:</Form.Label>
                                 <Form.Select>
-
+                                <option>Selecione uma categoria</option>
                                     {categorias.map((categoria) => (
                                         <option key={categoria.id} value={categoria.name}>
                                             {categoria.name}
@@ -258,7 +259,7 @@ const CadDespesa = () => {
                             <Form.Group className="mb-3" controlId="BancosDespesa">
                                 <Form.Label>Conta de banco:</Form.Label>
                                 <Form.Select>
-
+                                <option>Selecione um banco</option>
                                     {bancos.map((bancos) => (
                                         <option key={bancos.id} value={bancos.name}>
                                             {bancos.name}
