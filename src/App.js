@@ -9,6 +9,9 @@ import CadReceita from './pages/CadReceita/CadReceita';
 import Login from './auth/Login';
 import UserCreate from './auth/UserCreate';
 import GerenciarContas from "./pages/GerenciarContas/GerenciarContas";
+import AddPoupanca from "./pages/AddPoupanca/AddPoupanca";
+import RemovePoupanca from './pages/RemovePoupanca/RemovePoupanca'
+import PagarContas from "./pages/PagarContas/PagarContas";
 
 
 const App = () => {
@@ -23,6 +26,9 @@ const App = () => {
           <Route path='/CadReceita' element={<CadReceita/>}/>
           <Route path='/UserCreate' element={<UserCreate />} />
           <Route path='/GerenciarContas' element={<GerenciarContas />} />
+          <Route path='/AddPoupanca' element={<AddPoupanca />} />
+          <Route path='/RemovePoupanca' element={<RemovePoupanca />} />
+          <Route path='/PagarContas' element={<PagarContas />} />
          
         </Routes>
       </Router>

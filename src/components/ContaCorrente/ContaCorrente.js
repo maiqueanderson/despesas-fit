@@ -8,10 +8,11 @@ import {
     where,
 } from "firebase/firestore";
 
-import { Card, Col, Container, Row } from "react-bootstrap";
+import { Card, Col, Container, Row, Button } from "react-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleDot } from '@fortawesome/free-solid-svg-icons'
 import './ContaCorrente.css'
+import { Link } from "react-router-dom";
 
 const ContaCorrente = () => {
 
@@ -67,10 +68,16 @@ const ContaCorrente = () => {
                                 <p>{banco.name}</p>
                             </Col>
                             <Col xs={4}>
-                            <p className="ValueText">R$ {parseFloat(banco.saldoCorrente).toFixed(2)}</p>
+                                <p className="ValueText">R$ {parseFloat(banco.saldoCorrente).toFixed(2)}</p>
                             </Col>
                         </Row>
                     ))}
+                    <div className="btnConta my-3">
+                        <Link to='/GerenciarContas'>
+                        
+                        <Button variant="outline-success">Gerenciar contas</Button>
+                        </Link>
+                    </div>
                 </Card.Body>
             </Card>
         </Container>

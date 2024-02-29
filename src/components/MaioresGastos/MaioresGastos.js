@@ -1,4 +1,3 @@
-
 import { Card, Container, Row, Col, Button, Modal, Form } from "react-bootstrap";
 import "./MaioresGastos.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -18,10 +17,9 @@ const MaioresGastos = () => {
     const [catName, setCatName] = useState('');
     const [catCor, setCatCor] = useState('');
 
-     // eslint-disable-next-line
-     const [user, setUser] = useState(null);
-     // eslint-disable-next-line
-     const [userData, setUserData] = useState(null);
+    const [user, setUser] = useState(null);
+    // eslint-disable-next-line
+    const [userData, setUserData] = useState(null);
     // eslint-disable-next-line
     const [categorias, setCategorias] = useState([]);
 
@@ -44,24 +42,33 @@ const MaioresGastos = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            // Calcular o primeiro e último dia do mês atual
             const hoje = new Date();
+            let ultimoDiaDoMes;
+
+            if (hoje.getMonth() === 1 && ((hoje.getFullYear() % 4 === 0 && hoje.getFullYear() % 100 !== 0) || hoje.getFullYear() % 400 === 0)) {
+
+                // Fevereiro em ano bissexto
+                ultimoDiaDoMes = new Date(hoje.getFullYear(), hoje.getMonth() + 2, 0);
+            } else {
+                // Outros meses ou anos não bissextos
+                ultimoDiaDoMes = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0);
+            }
+
             const primeiroDiaDoMes = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
-            const ultimoDiaDoMes = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0);
-        
+
             // Consulta para obter todas as despesas do mês atual
             const q = query(collection(db, "despesas"), where("date", ">=", primeiroDiaDoMes), where("date", "<=", ultimoDiaDoMes));
             const querySnapshot = await getDocs(q);
-        
+
             // Mapear os documentos e extrair as categorias e valores das despesas
             const despesas = querySnapshot.docs.map(async (doc) => {
                 const categoria = doc.data().categoria;
                 const valor = doc.data().valor;
-        
+
                 // Consultar o documento da categoria correspondente
                 const catQuery = query(collection(db, "categorias"), where("name", "==", categoria));
                 const catSnapshot = await getDocs(catQuery);
-        
+
                 if (!catSnapshot.empty) {
                     const catData = catSnapshot.docs[0].data();
                     const cor = catData.cor;
@@ -71,7 +78,7 @@ const MaioresGastos = () => {
                     return null;
                 }
             });
-        
+
             // Filtrar despesas nulas e agrupar e somar os valores das despesas por categoria
             const despesasValidas = await Promise.all(despesas);
             const gastosPorCategoria = despesasValidas.reduce((acc, curr) => {
@@ -80,16 +87,16 @@ const MaioresGastos = () => {
                 }
                 return acc;
             }, {});
-        
+
             // Classificar as categorias pelos maiores gastos
             const maioresGastos = Object.entries(gastosPorCategoria)
-            .sort((a, b) => b[1] - a[1])
-            .map(([categoria, valor]) => {
-                const cor = despesasValidas.find((despesa) => despesa.categoria === categoria)?.cor;
-                return { categoria, valor, cor };
-            });
-        
-        setMaioresGastos(maioresGastos);
+                .sort((a, b) => b[1] - a[1])
+                .map(([categoria, valor]) => {
+                    const cor = despesasValidas.find((despesa) => despesa.categoria === categoria)?.cor;
+                    return { categoria, valor, cor };
+                });
+
+            setMaioresGastos(maioresGastos);
         };
 
         fetchData();
@@ -104,13 +111,11 @@ const MaioresGastos = () => {
 
                 const userDocRef = doc(db, "users", user.uid);
 
-
                 try {
                     const userDocSnapshot = await getDoc(userDocRef);
 
                     if (userDocSnapshot.exists()) {
                         setUserData(userDocSnapshot.data());
-
                     } else {
                         console.log("Documento de usuário não encontrado no Firestore.");
                         console.log(userDocSnapshot);
@@ -152,10 +157,10 @@ const MaioresGastos = () => {
                         <Row key={index}>
                             <Col xs={2}>
                                 <FontAwesomeIcon
-                                            className='iconF'
-                                            color={gasto.cor}
-                                            icon={faCircle}
-                                        />
+                                    className='iconF'
+                                    color={gasto.cor}
+                                    icon={faCircle}
+                                />
                             </Col>
                             <Col xs={6}>
                                 <p>{gasto.categoria}</p>
@@ -166,49 +171,45 @@ const MaioresGastos = () => {
                         </Row>
                     ))}
                     <div className="btnMaiores py-3">
-
-                    <Button onClick={handleShow} variant="outline-success">Criar Categoria</Button>
+                        <Button onClick={handleShow} variant="outline-success">Criar Categoria</Button>
                     </div>
                 </Card.Body>
             </Card>
 
             <Modal show={show} onHide={handleClose}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>Crie uma nova categoria</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <Form>
-                            <Form.Group className="mb-3" controlId="editBank.ControlName">
-                                <Form.Label>Nome da categoria</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    placeholder="Nome da categoria"
-                                    value={catName}
-                                    onChange={(e) => setCatName(e.target.value)}
-                                />
-
-                            </Form.Group>
-                            <Form.Label htmlFor="exampleColorInput">Escolha a cor da categoria</Form.Label>
+                <Modal.Header closeButton>
+                    <Modal.Title>Crie uma nova categoria</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form>
+                        <Form.Group className="mb-3" controlId="editBank.ControlName">
+                            <Form.Label>Nome da categoria</Form.Label>
                             <Form.Control
-                                type="color"
-                                id="BankColorInput"
-
-                                title="Escolha a cor do Banco"
-                                value={catCor}
-                                onChange={(e) => setCatCor(e.target.value)}
+                                type="text"
+                                placeholder="Nome da categoria"
+                                value={catName}
+                                onChange={(e) => setCatName(e.target.value)}
                             />
-                        </Form>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button variant="secondary" onClick={handleClose}>
-                            Cancelar
-                        </Button>
-                        <Button variant="primary" onClick={handleAddCategory}>
-                            Salvar
-                        </Button>
-                    </Modal.Footer>
-                </Modal>
-
+                        </Form.Group>
+                        <Form.Label htmlFor="exampleColorInput">Escolha a cor da categoria</Form.Label>
+                        <Form.Control
+                            type="color"
+                            id="BankColorInput"
+                            title="Escolha a cor do Banco"
+                            value={catCor}
+                            onChange={(e) => setCatCor(e.target.value)}
+                        />
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>
+                        Cancelar
+                    </Button>
+                    <Button variant="primary" onClick={handleAddCategory}>
+                        Salvar
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </Container>
     );
 };

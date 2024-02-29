@@ -8,9 +8,8 @@ import {
     where,
   } from "firebase/firestore";
   
-import { Container, Card, Row, Col, Button } from "react-bootstrap";
+import { Container, Card, Row, Col } from "react-bootstrap";
 import './Header.css'
-import { Link } from "react-router-dom";
 
 const Home = () => {
     // eslint-disable-next-line
@@ -125,16 +124,6 @@ const Home = () => {
                             </div>
                         </Col>
 
-                        <Col xs={12} lg={4}>
-                            <div className="btnText">
-                                
-                                <Row>
-                                    <Link to='/GerenciarContas'>   
-                                   <Button className="btnHeader">Gerenciar Contas</Button> 
-                                    </Link>
-                                </Row>
-                            </div>
-                        </Col>
 
                     </Row>
 

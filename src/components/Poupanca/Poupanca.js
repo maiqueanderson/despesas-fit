@@ -12,6 +12,7 @@ import { Card, Col, Container, Row, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleDot } from '@fortawesome/free-solid-svg-icons'
 import './Poupanca.css'
+import { Link } from "react-router-dom";
 
 const Poupanca = () => {
 
@@ -75,8 +76,10 @@ const Poupanca = () => {
                         </Row>
                     ))}
                     <div className="btnConta my-3">
-
-                        <Button variant="outline-success">Adicionar dinheiro a poupança</Button>
+                    <Link to='/AddPoupanca'>
+                    
+                        <Button variant="outline-success">Gerenciar poupança</Button>
+                    </Link>
                     </div>
                 </Card.Body>
             </Card>

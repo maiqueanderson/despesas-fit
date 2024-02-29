@@ -12,6 +12,7 @@ import { Button, Card, Col, Container, Row } from "react-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircle } from '@fortawesome/free-solid-svg-icons'
 import './ContasAPagar.css'
+import { Link } from "react-router-dom";
 
 const ContaCorrente = () => {
 
@@ -72,8 +73,10 @@ const ContaCorrente = () => {
                         </Row>
                     ))}
                     <div className="btnConta my-3">
-
+                    <Link to='/PagarContas'>
+                    
                     <Button variant="outline-success">Pagar Contas</Button>
+                    </Link>
                     </div>
                 </Card.Body>
             </Card>
