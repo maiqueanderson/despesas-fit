@@ -44,33 +44,42 @@ const MaioresGastos = () => {
 
     useEffect(() => {
         const fetchData = async () => {
+            if (!user) {
+                console.error("Usuário não autenticado.");
+                return;
+            }
+    
+            if (!user.uid) {
+                console.error("UID do usuário inválido.");
+                return;
+            }
+    
             const hoje = new Date();
             let ultimoDiaDoMes;
-
+    
             if (hoje.getMonth() === 1 && ((hoje.getFullYear() % 4 === 0 && hoje.getFullYear() % 100 !== 0) || hoje.getFullYear() % 400 === 0)) {
-
                 // Fevereiro em ano bissexto
                 ultimoDiaDoMes = new Date(hoje.getFullYear(), hoje.getMonth() + 2, 0);
             } else {
                 // Outros meses ou anos não bissextos
                 ultimoDiaDoMes = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0);
             }
-
+    
             const primeiroDiaDoMes = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
-
+    
             // Consulta para obter todas as despesas do mês atual
-            const q = query(collection(db, "despesas"), where("date", ">=", primeiroDiaDoMes), where("date", "<=", ultimoDiaDoMes));
+            const q = query(collection(db, "despesas"), where("date", ">=", primeiroDiaDoMes), where("date", "<=", ultimoDiaDoMes), where("uid", "==", user.uid));
             const querySnapshot = await getDocs(q);
-
+    
             // Mapear os documentos e extrair as categorias e valores das despesas
             const despesas = querySnapshot.docs.map(async (doc) => {
                 const categoria = doc.data().categoria;
                 const valor = doc.data().valor;
-
+    
                 // Consultar o documento da categoria correspondente
-                const catQuery = query(collection(db, "categorias"), where("name", "==", categoria));
+                const catQuery = query(collection(db, "categorias"), where("name", "==", categoria), where("uid", "==", user.uid));
                 const catSnapshot = await getDocs(catQuery);
-
+    
                 if (!catSnapshot.empty) {
                     const catData = catSnapshot.docs[0].data();
                     const cor = catData.cor;
@@ -80,7 +89,7 @@ const MaioresGastos = () => {
                     return null;
                 }
             });
-
+    
             // Filtrar despesas nulas e agrupar e somar os valores das despesas por categoria
             const despesasValidas = await Promise.all(despesas);
             const gastosPorCategoria = despesasValidas.reduce((acc, curr) => {
@@ -89,7 +98,7 @@ const MaioresGastos = () => {
                 }
                 return acc;
             }, {});
-
+    
             // Classificar as categorias pelos maiores gastos
             const maioresGastos = Object.entries(gastosPorCategoria)
                 .sort((a, b) => b[1] - a[1])
@@ -97,12 +106,16 @@ const MaioresGastos = () => {
                     const cor = despesasValidas.find((despesa) => despesa.categoria === categoria)?.cor;
                     return { categoria, valor, cor };
                 });
-
+    
             setMaioresGastos(maioresGastos);
         };
-
-        fetchData();
-    }, []);
+    
+        if (user) {
+            fetchData();
+        }
+    }, [user]);
+    
+    
 
     useEffect(() => {
         const auth = getAuth(app);
@@ -135,7 +148,7 @@ const MaioresGastos = () => {
 
     useEffect(() => {
         if (!user) return; // Se o usuário for null, saia da função
-
+    
         const categoriasCollectionRef = collection(db, "categorias");
         const categoriasQuery = query(categoriasCollectionRef, where("uid", "==", user.uid));
         const unsubscribe = onSnapshot(categoriasQuery, (snapshot) => {
@@ -147,6 +160,7 @@ const MaioresGastos = () => {
         });
         return () => unsubscribe();
     }, [user]);
+    
 
     return (
         <Container className="cardBody py-3">

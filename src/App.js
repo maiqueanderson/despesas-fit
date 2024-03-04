@@ -12,6 +12,7 @@ import GerenciarContas from "./pages/GerenciarContas/GerenciarContas";
 import AddPoupanca from "./pages/AddPoupanca/AddPoupanca";
 import RemovePoupanca from './pages/RemovePoupanca/RemovePoupanca'
 import PagarContas from "./pages/PagarContas/PagarContas";
+import GerenciarFaturas from "./pages/GerenciarFaturas/GerenciarFaturas";
 
 
 const App = () => {
@@ -29,6 +30,7 @@ const App = () => {
           <Route path='/AddPoupanca' element={<AddPoupanca />} />
           <Route path='/RemovePoupanca' element={<RemovePoupanca />} />
           <Route path='/PagarContas' element={<PagarContas />} />
+          <Route path='/GerenciarFaturas' element={<GerenciarFaturas />} />
          
         </Routes>
       </Router>

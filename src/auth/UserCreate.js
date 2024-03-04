@@ -39,25 +39,13 @@ const UserCreate = () => {
             uid: auth.currentUser.uid,
           });
 
-          const usersReceita = collection(db, "receitas");
+          const usersReceita = collection(db, "categorias");
           await setDoc(doc(usersReceita, auth.currentUser.uid), {
-            valor: '0,00',
-            categoria: 'Categoria Exemplo',
-            date: new Date(),
-            banco: 'Exemplo Banco',
-            tipoConta: 'Conta Corrente',
+            cor: '#2b1212',
+            name: 'Cartão de crédito',
             uid: auth.currentUser.uid,
           });
 
-          const usersDespesa = collection(db, "despesas");
-          await setDoc(doc(usersDespesa, auth.currentUser.uid), {
-            valor: '0,00',
-            categoria: 'Categoria Exemplo',
-            date: new Date(),
-            banco: 'Exemplo Banco',
-            tipoConta: 'Conta Corrente',
-            uid: auth.currentUser.uid,
-          });
 
           navigate("/Home"); // Redirecionar para a rota '/Home' após o cadastro bem-sucedido
         } catch (err) {

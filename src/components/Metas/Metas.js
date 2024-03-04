@@ -1,7 +1,7 @@
 
 import './Metas.css'
 
-import { Card, Container, Row, Col} from "react-bootstrap";
+import { Card, Container, Row, Col } from "react-bootstrap";
 import React, { useEffect, useState } from "react";
 import { app, db } from "../../database/firebaseconfig";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
@@ -20,6 +20,16 @@ const Metas = () => {
 
     useEffect(() => {
         const fetchData = async () => {
+            if (!user) {
+                console.error("Usuário não autenticado.");
+                return;
+            }
+
+            if (!user.uid) {
+                console.error("UID do usuário inválido.");
+                return;
+            }
+
             const hoje = new Date();
             let ultimoDiaDoMes;
 
@@ -38,7 +48,8 @@ const Metas = () => {
             const q = query(
                 collection(db, "despesas"),
                 where("date", ">=", primeiroDiaDoMes),
-                where("date", "<=", ultimoDiaDoMes)
+                where("date", "<=", ultimoDiaDoMes),
+                where("uid", "==", user.uid) // Filtrar despesas pelo UID do usuário
             );
             const querySnapshot = await getDocs(q);
 
@@ -46,7 +57,7 @@ const Metas = () => {
                 const categoria = doc.data().categoria;
                 const valor = doc.data().valor;
 
-                const catQuery = query(collection(db, "categorias"), where("name", "==", categoria));
+                const catQuery = query(collection(db, "categorias"), where("name", "==", categoria), where("uid", "==", user.uid)); // Filtrar categorias pelo UID do usuário
                 const catSnapshot = await getDocs(catQuery);
 
                 if (!catSnapshot.empty) {
@@ -80,9 +91,11 @@ const Metas = () => {
 
             setMaioresGastos(categoriasArray);
         };
+        if (user) {
+            fetchData();
+        }
+    }, [user]);
 
-        fetchData();
-    }, []);
 
     useEffect(() => {
         const auth = getAuth(app);
@@ -139,29 +152,33 @@ const Metas = () => {
                             <p className="titleText">Categoria</p>
                         </Col>
                         <Col>
-                            <p className="titleText">Meta</p>
+                            <p className="titleText">Gastos</p>
                         </Col>
                         <Col>
-                            <p className="titleText">Gasto</p>
+                            <p className="titleText">Meta</p>
                         </Col>
                     </Row>
                     {maioresGastos.map((categoria, index) => (
-                        <Row key={index}>
-                            <Col>
-                                <p>{categoria.categoria}</p>
-                            </Col>
-                            <Col>
-                                <p className={categoria.valor > categoria.meta ? "gastOver" : "gastInside"}>
-                                    R$ {categoria.valor.toFixed(2)}
-                                </p>
-                            </Col>
-                            <Col>
-                                <p >
-                                    R$ {parseFloat(categoria.meta).toFixed(2)}
-                                </p>
-                            </Col>
-                        </Row>
+                        // Verifica se categoria.meta não é NaN antes de renderizar
+                        !isNaN(categoria.meta) && (
+                            <Row key={index}>
+                                <Col>
+                                    <p>{categoria.categoria}</p>
+                                </Col>
+                                <Col>
+                                    <p className={categoria.valor > categoria.meta ? "gastOver" : "gastInside"}>
+                                        R$ {categoria.valor.toFixed(2)}
+                                    </p>
+                                </Col>
+                                <Col>
+                                    <p >
+                                        R$ {parseFloat(categoria.meta).toFixed(2)}
+                                    </p>
+                                </Col>
+                            </Row>
+                        )
                     ))}
+
                 </Card.Body>
             </Card>
         </Container>

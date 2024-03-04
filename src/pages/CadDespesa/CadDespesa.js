@@ -35,15 +35,17 @@ const CadDespesa = () => {
 
     const [catName, setCatName] = useState('');
     const [catCor, setCatCor] = useState('');
+    const [catMeta, setCatMeta] = useState('');
 
     const handleAddCategory = async () => {
-        if (!catName || !catCor) return;
+        if (!catName || !catCor || !catMeta) return;
 
         try {
             const categoriasCollectionRef = collection(db, "categorias");
             await addDoc(categoriasCollectionRef, {
                 name: catName,
                 cor: catCor,
+                meta: catMeta,
                 uid: user.uid,
             });
 
@@ -301,41 +303,50 @@ const CadDespesa = () => {
                 </Card>
 
                 <Modal show={show} onHide={handleClose}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>Crie uma nova categoria</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <Form>
-                            <Form.Group className="mb-3" controlId="editBank.ControlName">
-                                <Form.Label>Nome da categoria</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    placeholder="Nome da categoria"
-                                    value={catName}
-                                    onChange={(e) => setCatName(e.target.value)}
-                                />
-
-                            </Form.Group>
-                            <Form.Label htmlFor="exampleColorInput">Escolha a cor da categoria</Form.Label>
+                <Modal.Header closeButton>
+                    <Modal.Title>Crie uma nova categoria</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form>
+                        <Form.Group className="mb-3" controlId="editBank.ControlName">
+                            <Form.Label>Nome da categoria</Form.Label>
                             <Form.Control
-                                type="color"
-                                id="BankColorInput"
-
-                                title="Escolha a cor do Banco"
-                                value={catCor}
-                                onChange={(e) => setCatCor(e.target.value)}
+                                type="text"
+                                placeholder="Nome da categoria"
+                                value={catName}
+                                onChange={(e) => setCatName(e.target.value)}
                             />
-                        </Form>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button variant="secondary" onClick={handleClose}>
-                            Cancelar
-                        </Button>
-                        <Button variant="primary" onClick={handleAddCategory}>
-                            Salvar
-                        </Button>
-                    </Modal.Footer>
-                </Modal>
+                        </Form.Group>
+
+                        <Form.Group className="mb-3" controlId="editBank.ControlMeta">
+                            <Form.Label>Meta de gastos mensal</Form.Label>
+                            <Form.Control
+                                type="number"
+                                placeholder="R$ 00,00"
+                                value={catMeta}
+                                onChange={(e) => setCatMeta(e.target.value)}
+                            />
+                        </Form.Group>
+
+                        <Form.Label htmlFor="exampleColorInput">Escolha a cor da categoria</Form.Label>
+                        <Form.Control
+                            type="color"
+                            id="BankColorInput"
+                            title="Escolha a cor do Banco"
+                            value={catCor}
+                            onChange={(e) => setCatCor(e.target.value)}
+                        />
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>
+                        Cancelar
+                    </Button>
+                    <Button variant="primary" onClick={handleAddCategory}>
+                        Salvar
+                    </Button>
+                </Modal.Footer>
+            </Modal>
 
             </Container>
             <Footer />

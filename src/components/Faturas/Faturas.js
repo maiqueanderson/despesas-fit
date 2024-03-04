@@ -1,8 +1,43 @@
-import { Card, Col, Container, Row } from "react-bootstrap";
+import { Button, Card, Col, Container, Row } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { db } from "../../database/firebaseconfig";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import './Faturas.css'
 
-const Faturas = () =>{
-    return(
+const Faturas = () => {
+    const [faturas, setFaturas] = useState([]);
+    const [currentUser, setCurrentUser] = useState(null);
+
+    useEffect(() => {
+        const auth = getAuth();
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            if (user) {
+                setCurrentUser(user);
+            } else {
+                setCurrentUser(null);
+            }
+        });
+
+        return () => unsubscribe();
+    }, []);
+
+    useEffect(() => {
+        const fetchFaturas = async () => {
+            if (!currentUser) return;
+
+            const faturasCollectionRef = collection(db, "faturas");
+            const q = query(faturasCollectionRef, where("uid", "==", currentUser.uid));
+            const querySnapshot = await getDocs(q);
+            const faturasData = querySnapshot.docs.map(doc => doc.data());
+            setFaturas(faturasData);
+        };
+
+        fetchFaturas();
+    }, [currentUser]);
+
+    return (
         <Container className="cardBody py-3 mb-5 pb-5">
             <Card>
                 <Card.Body className="pb-5">
@@ -11,34 +46,30 @@ const Faturas = () =>{
                     </Row>
                     <Row>
                         <Col xs={8}>
-                        <p>Mercado Pago</p>
+                          
+                                {faturas.map((fatura, index) => (
+                                    <div className="my-3" key={index}>{fatura.banco}</div>
+                                ))}
+                           
                         </Col>
                         <Col xs={4}>
-                        <p className="ValueCredit">R$ 800,00</p>
+   
+                                {faturas.map((fatura, index) => (
+                                    <div className="my-3 ValueCredit" key={index}>R$ {fatura.valor.toFixed(2)}</div>
+                                ))}
+                           
                         </Col>
                     </Row>
 
-                    <Row>
-                        <Col xs={8}>
-                        <p>Inter</p>
-                        </Col>
-                        <Col xs={4}>
-                        <p className="ValueCredit">R$ 300,00</p>
-                        </Col>
-                    </Row>
-
-                    <Row>
-                        <Col xs={8}>
-                        <p>Nubank</p>
-                        </Col>
-                        <Col xs={4}>
-                        <p className="ValueCredit">R$ 200,00</p>
-                        </Col>
-                    </Row>
+                    <div className="btnF mt-3">
+                        <Link to='/GerenciarFaturas'>
+                            <Button variant="outline-success">Gerenciar Faturas</Button>
+                        </Link>
+                    </div>
                 </Card.Body>
             </Card>
         </Container>
-    )
-}
+    );
+};
 
 export default Faturas;
