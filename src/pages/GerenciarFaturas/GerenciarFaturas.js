@@ -28,6 +28,7 @@ const GerenciarFaturas = () => {
     const [show, setShow] = useState(false);
     const [show2, setShow2] = useState(false);
     const [show3, setShow3] = useState(false);
+    
 
     const handleClose = () => setShow(false);
     const handleClose2 = () => setShow2(false);
@@ -44,6 +45,7 @@ const GerenciarFaturas = () => {
     const [bankName, setBankName] = useState("");
     const [faturakName, setFaturaName] = useState("");
     const [valorFatura, setValorFatura] = useState(0);
+    
 
     const [faturaToDelete, setFaturaToDelete] = useState(null);
 
@@ -97,6 +99,7 @@ const GerenciarFaturas = () => {
                     uid: user.uid,
                     valor: parseFloat(valorFatura),
                     status: "pago",
+                    despesaName: "Fatura de cartão",
                 });
     
                 // Exclui a fatura selecionada
@@ -252,6 +255,15 @@ const GerenciarFaturas = () => {
 
         // eslint-disable-next-line
     }, []);
+
+    useEffect(() => {
+        if (faturakName) {
+            const faturaSelecionada = faturas.find((fatura) => fatura.banco === faturakName);
+            if (faturaSelecionada) {
+                setValorFatura(faturaSelecionada.valor);
+            }
+        }
+    }, [faturakName, faturas]);
 
     return (
         <>

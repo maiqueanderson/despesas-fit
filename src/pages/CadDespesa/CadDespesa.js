@@ -227,10 +227,10 @@ const CadDespesa = () => {
                 </Row>
             </div>
 
-            <Container className="cardBody">
+            <Container className="cardBody pb-5 mb-5">
 
-                <Card className="cardDespesa">
-                    <Card.Body>
+                <Card className="cardDespesa pb-5">
+                    <Card.Body className="">
                         <div className="despesaPage">
                             <img src={despesaPage} height={80} alt="despesaPage" />
                             <p className="titleD my-2">Cadastrar Despesa</p>

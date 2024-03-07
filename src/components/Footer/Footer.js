@@ -19,7 +19,10 @@ const Footer = () =>{
                     </Link>
                     </Col>
                     <Col>
+                    <Link to='/Historico'>
+                    
                     <FontAwesomeIcon className='iconF' color='#606060' icon={faMoneyBillTransfer} />
+                    </Link>
                     </Col>
                     <Col className='mais'>
                         <Link className='textMais' to='/CadDespesas'>
