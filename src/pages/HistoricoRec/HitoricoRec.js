@@ -1,5 +1,5 @@
 import { Card, Container, Row, Col } from 'react-bootstrap';
-import './Historico.css';
+import './HistoricoRec.css';
 import Footer from '../../components/Footer/Footer';
 import { useEffect, useState } from 'react';
 import { app, db } from "../../database/firebaseconfig";
@@ -8,7 +8,7 @@ import { getDocs, collection, query, where, doc, getDoc } from "firebase/firesto
 import { Link } from "react-router-dom";
 
 const Historico = () => {
-    const [despesas, setDespesas] = useState([]);
+    const [receitas, setReceitas] = useState([]);
     const [user, setUser] = useState(null);
     // eslint-disable-next-line 
     const [userData, setUserData] = useState(null);
@@ -24,13 +24,13 @@ const Historico = () => {
                 console.error("UID do usuário inválido.");
                 return;
             }
-            // Consulta para obter todas as despesas do usuário
-            const q = query(collection(db, 'despesas'), where('uid', '==', user.uid));
+            // Consulta para obter todas as receitas do usuário
+            const q = query(collection(db, 'receitas'), where('uid', '==', user.uid));
             const querySnapshot = await getDocs(q);
-            const despesasData = querySnapshot.docs.map(doc => doc.data());
-            // Ordena as despesas por data, da mais nova para a mais antiga
-            despesasData.sort((a, b) => b.date - a.date);
-            setDespesas(despesasData);
+            const receitasData = querySnapshot.docs.map(doc => doc.data());
+            // Ordena as receitas por data, da mais nova para a mais antiga
+            receitasData.sort((a, b) => b.date - a.date);
+            setReceitas(receitasData);
         };
 
         if (user) {
@@ -69,7 +69,7 @@ const Historico = () => {
 
     return (
         <>
-            <div className="nav3">
+            <div className="nav">
 
             </div>
             <Footer />
@@ -79,13 +79,13 @@ const Historico = () => {
                     <Row className=" navCard pb-3">
 
                         <Col className=" mx-5" >
-                            <Link to='/Historico' className="navCard">
+                            <Link to='/Historico' className="navCard2">
                                 DESPESA
                             </Link>
                         </Col>
 
                         <Col className=" mx-5">
-                            <Link to='/HistoricoRec' className="navCard2">
+                            <Link to='/HistoricoRec' className="navCard">
                                 RECEITA
                             </Link>
                         </Col>
@@ -93,16 +93,16 @@ const Historico = () => {
                 </Row>
                 <Card className=''>
                     <Card.Body className=''>
-                        {despesas.map((despesa, index) => (
+                        {receitas.map((receita, index) => (
                             <Row className='textHi' key={index}>
                                 <Col xs={6}>
-                                    <p>{despesa.despesaName}</p>
+                                    <p>{receita.categoria}</p>
                                 </Col>
                                 <Col xs={3}>
-                                    <p>R$ {despesa.valor}</p>
+                                    <p>R$ {receita.valor}</p>
                                 </Col>
                                 <Col xs={3}>
-                                    <p>{despesa.date && despesa.date.toDate().toLocaleDateString()}</p>
+                                    <p>{receita.date && receita.date.toDate().toLocaleDateString()}</p>
                                 </Col>
                                 <hr />
                             </Row>

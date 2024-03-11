@@ -14,6 +14,8 @@ import RemovePoupanca from './pages/RemovePoupanca/RemovePoupanca'
 import PagarContas from "./pages/PagarContas/PagarContas";
 import GerenciarFaturas from "./pages/GerenciarFaturas/GerenciarFaturas";
 import Historico from "./pages/Historico/Historico";
+import HistoricoRec from "./pages/HistoricoRec/HitoricoRec"
+import Graficos from "./pages/Graficos/Graficos";
 
 
 const App = () => {
@@ -33,6 +35,8 @@ const App = () => {
           <Route path='/PagarContas' element={<PagarContas />} />
           <Route path='/GerenciarFaturas' element={<GerenciarFaturas />} />
           <Route path='/Historico' element={<Historico />} />
+          <Route path='/HistoricoRec' element={<HistoricoRec />} />
+          <Route path='/Graficos' element={<Graficos />} />
          
         </Routes>
       </Router>

@@ -31,7 +31,10 @@ const Footer = () =>{
                         </Link>
                     </Col>
                     <Col>
+                    <Link to='/Graficos'>
+                    
                     <FontAwesomeIcon className='iconF' color='#606060' icon={faChartColumn} />
+                    </Link>
                     </Col>
                     <Col>
                     <FontAwesomeIcon className='iconF' color='#606060' icon={faCalendar} />    
