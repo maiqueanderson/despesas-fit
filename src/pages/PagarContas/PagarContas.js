@@ -160,7 +160,7 @@ const PagarContas = () => {
 
     return (
         <>
-            <div className="nav3">
+            <div className="nav">
 
             </div>
 

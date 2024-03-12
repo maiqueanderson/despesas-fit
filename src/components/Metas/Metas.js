@@ -1,22 +1,50 @@
 
 import './Metas.css'
-
-import { Card, Container, Row, Col } from "react-bootstrap";
+import { Card, Container, Row, Col, Button, Form, Modal } from "react-bootstrap";
 import React, { useEffect, useState } from "react";
 import { app, db } from "../../database/firebaseconfig";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { getDocs, collection, query, where, onSnapshot, doc, getDoc } from "firebase/firestore";
+import { getDocs, collection, query, where, onSnapshot, doc, getDoc, updateDoc } from "firebase/firestore";
 
 const Metas = () => {
 
     const [maioresGastos, setMaioresGastos] = useState([]);
-
     const [user, setUser] = useState(null);
     // eslint-disable-next-line
     const [userData, setUserData] = useState(null);
     // eslint-disable-next-line
     const [categorias, setCategorias] = useState([]);
+    const [categoriaSelect, setCategoriaSelect] = useState('');
 
+    const [show, setShow] = useState(false);
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+
+    const [catMeta, setCatMeta] = useState('');
+
+    const saveMeta = async () => {
+        try {
+            const catRef = collection(db, "categorias");
+            const catQuery = query(catRef, where("uid", "==", user.uid), where("name", "==", categoriaSelect));
+            const catSnapshot = await getDocs(catQuery);
+    
+            if (!catSnapshot.empty) {
+                const docId = catSnapshot.docs[0].id;
+                const categoriaDocRef = doc(db, 'categorias', docId);
+                await updateDoc(categoriaDocRef, {
+                    meta: parseFloat(catMeta) // Atualiza o campo 'meta' com o novo valor
+                });
+                handleClose(); // Fecha o modal após salvar
+                window.location.reload();
+                
+            } else {
+                console.error("Categoria não encontrada para o usuário:", categoriaSelect);
+            }
+        } catch (error) {
+            console.error('Erro ao atualizar a meta:', error);
+        }
+    };
+    
 
     useEffect(() => {
         const fetchData = async () => {
@@ -176,11 +204,60 @@ const Metas = () => {
                                     </p>
                                 </Col>
                             </Row>
+
                         )
                     ))}
+                    <div className="btnMaiores py-3">
+                        <Button onClick={handleShow} variant="outline-success">Alterar Metas</Button>
+                    </div>
 
                 </Card.Body>
             </Card>
+
+            <Modal show={show} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Alterar uma Meta</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form>
+                        <Form.Group className="mb-3" controlId="editBank.ControlName">
+                            <Form.Label>Selecione a categoria</Form.Label>
+                            <Form.Select
+                                    value={categoriaSelect}
+                                    onChange={(e) => setCategoriaSelect(e.target.value)}
+                                >
+                                    <option>Selecione uma categoria</option>
+                                    {categorias.map((categoria) => (
+                                        <option key={categoria.id} value={categoria.name}>
+                                            {categoria.name}
+                                        </option>
+                                    ))}
+                                </Form.Select>
+                        </Form.Group>
+
+                        <Form.Group className="mb-3" controlId="editBank.ControlMeta">
+                            <Form.Label>Meta de gastos mensal</Form.Label>
+                            <Form.Control
+                                type="number"
+                                placeholder="R$ 00,00"
+                                value={catMeta}
+                                onChange={(e) => setCatMeta(e.target.value)}
+                            />
+                        </Form.Group>
+
+                      
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>
+                        Cancelar
+                    </Button>
+                    <Button variant="primary" onClick={saveMeta}>
+                        Salvar
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+
         </Container>
     );
 };
