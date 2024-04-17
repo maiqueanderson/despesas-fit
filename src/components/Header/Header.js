@@ -17,6 +17,7 @@ const Home = () => {
     const [totalCorrente, setTotalCorrente] = useState(0);
     const [totalReceitas, setTotalReceitas] = useState(0);
     const [totalDespesas, setTotalDespesas] = useState(0);
+    const [balanco, setBalanco] = useState(0);
 
     useEffect(() => {
         const auth = getAuth(app);
@@ -49,6 +50,27 @@ const Home = () => {
                     where("date", "<", new Date(currentDate.getFullYear(), currentMonth, 1))
                 ));
 
+                 // Consulta para obter todas as receitas para receber
+                 const paraReceberCollectionRef = collection(db, "paraReceber");
+                 const querySnapshotParaReceber = await getDocs(query(paraReceberCollectionRef, 
+                     where("uid", "==", user.uid),
+                    
+                 ));
+
+                 // Consulta para obter todas as despesas do mês atual
+                 const paraPagarCollectionRef = collection(db, "paraPagar");
+                 const querySnapshotParaPagar = await getDocs(query(paraPagarCollectionRef, 
+                     where("uid", "==", user.uid),
+                    
+                 ));
+
+                  // Consulta para obter todas as receitas para receber
+                  const FaturasCollectionRef = collection(db, "faturas");
+                  const querySnapshotFaturas = await getDocs(query(FaturasCollectionRef, 
+                      where("uid", "==", user.uid),
+                     
+                  ));
+
                 let totalSaldoCorrente = 0;
                 querySnapshot.forEach((doc) => {
                     const data = doc.data();
@@ -67,9 +89,28 @@ const Home = () => {
                     totalDespesas += parseFloat(data.valor);
                 });
 
+                let totalParaPagar = 0;
+                querySnapshotParaPagar.forEach((doc) => {
+                    const data = doc.data();
+                    totalParaPagar += parseFloat(data.valor);
+                });
+
+                let totalParaReceber = 0;
+                querySnapshotParaReceber.forEach((doc) => {
+                    const data = doc.data();
+                    totalParaReceber += parseFloat(data.valor);
+                });
+
+                let totalFaturas = 0;
+                querySnapshotFaturas.forEach((doc) => {
+                    const data = doc.data();
+                    totalFaturas += parseFloat(data.valor);
+                });
+
                 setTotalCorrente(totalSaldoCorrente);
                 setTotalReceitas(totalReceitas);
                 setTotalDespesas(totalDespesas);
+                setBalanco((totalReceitas + totalParaReceber) - (totalDespesas + totalParaPagar + totalFaturas));
             }
         });
 
@@ -92,6 +133,13 @@ const Home = () => {
                                 </Row>
                                 <Row>
                                     <p className="userSaldo">R$ {parseFloat(totalCorrente).toFixed(2)}</p>
+                                </Row>
+
+                                <Row>
+                                    <p className="mb-0 mt-3 saldoGeral">Balanço do mês</p>
+                                </Row>
+                                <Row>
+                                    <p className="userSaldo">R$ {parseFloat(balanco).toFixed(2)}</p>
                                 </Row>
                               
                             </div>

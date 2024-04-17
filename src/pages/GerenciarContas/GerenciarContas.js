@@ -41,7 +41,7 @@ const GerenciarContas = () => {
     const [newName, setNewName] = useState("");
     const [newSaldoCorrente, setNewSaldoCorrente] = useState(0);
     const [newSaldoPoupanca, setNewSaldoPoupanca] = useState(0);
-    const [newCor, setNewCor] = useState("");
+    const [newCor, setNewCor] = useState("#000000");
 
     const [bankToDelete, setBankToDelete] = useState(null);
 
@@ -50,34 +50,44 @@ const GerenciarContas = () => {
         handleShow2();
     };
 
-    //Função para adicionar novas contas de banco
-    const handleAddBank = async () => {
-        if (!user || !newName || !newSaldoCorrente || !newCor) return;
-    
-        try {
-            const bancosCollectionRef = collection(db, "bancos");
-            await addDoc(bancosCollectionRef, {
-                uid: user.uid,
-                name: newName,
-                saldoCorrente: parseFloat(newSaldoCorrente),
-                saldoPoupanca: parseFloat(newSaldoPoupanca),
-                cor: newCor,
-            });
-    
-            // Atualizar localmente a lista de bancos
-            setBancos([...bancos, {
-                name: newName,
-                saldoCorrente: parseFloat(newSaldoCorrente),
-                saldoPoupanca: parseFloat(newSaldoPoupanca),
-                cor: newCor,
-            }]);
-    
-            handleClose3();
-        } catch (error) {
-            console.error("Erro ao adicionar banco:", error);
-        }
-    };
-    
+  // Função para adicionar novas contas de banco
+const handleAddBank = async () => {
+    if (!user || !newName || isNaN(newSaldoCorrente) || isNaN(newSaldoPoupanca) || !newCor) {
+        console.log("Preencha todos os campos obrigatórios.");
+        return;
+    }
+
+    console.log("Adicionando novo banco com os seguintes dados:");
+    console.log("Nome:", newName);
+    console.log("Saldo Corrente:", newSaldoCorrente);
+    console.log("Saldo Poupança:", newSaldoPoupanca);
+    console.log("Cor:", newCor);
+
+    try {
+        const bancosCollectionRef = collection(db, "bancos");
+        await addDoc(bancosCollectionRef, {
+            uid: user.uid,
+            name: newName,
+            saldoCorrente: parseFloat(newSaldoCorrente),
+            saldoPoupanca: parseFloat(newSaldoPoupanca),
+            cor: newCor,
+        });
+
+        // Atualizar localmente a lista de bancos
+        setBancos([...bancos, {
+            name: newName,
+            saldoCorrente: parseFloat(newSaldoCorrente),
+            saldoPoupanca: parseFloat(newSaldoPoupanca),
+            cor: newCor,
+        }]);
+
+        handleClose3();
+    } catch (error) {
+        console.error("Erro ao adicionar banco:", error);
+    }
+};
+
+
 
     // Função para excluir o banco selecionado
     const handleConfirmDelete = async () => {
@@ -212,7 +222,7 @@ const GerenciarContas = () => {
                                 {bancos.map((banco, indexI) => (
                                     <div className="my-3" key={indexI}>
                                         <FontAwesomeIcon
-                                            
+
                                             color={banco.cor}
                                             icon={faCircleDot}
                                         />
@@ -227,15 +237,15 @@ const GerenciarContas = () => {
                             </Col>
                             <Col xs={4}>
                                 {bancos.map((banco, index2) => (
-                                    <div className="my-3" key={index2}>R$ {banco.saldoCorrente.toFixed(2)}</div>
-                                    
+                                    <div className="my-3" key={index2}>R$ {parseFloat(banco.saldoCorrente).toFixed(2)}</div>
+
                                 ))}
                             </Col>
                             <Col xs={1}>
                                 {bancos.map((banco, index3) => (
                                     <div className="my-3" key={index3}>
                                         <FontAwesomeIcon
-                                           
+
                                             color='#606060'
                                             icon={faPenToSquare}
                                             onClick={() => handleEditBank(banco)}
@@ -247,7 +257,7 @@ const GerenciarContas = () => {
                                 {bancos.map((banco, index4) => (
                                     <div className="my-3" key={index4}>
                                         <FontAwesomeIcon
-                                            
+
                                             color='#c32722'
                                             icon={faTrash}
                                             onClick={() => handleDeleteBank(banco)}
@@ -258,7 +268,7 @@ const GerenciarContas = () => {
                         </Row>
                         <Row>
                             <div className="btnText">
-                            <Button className="btnHeader" onClick={handleShow3}>Adicionar Conta</Button>
+                                <Button className="btnHeader" onClick={handleShow3}>Adicionar Conta</Button>
 
                             </div>
                         </Row>
@@ -337,57 +347,58 @@ const GerenciarContas = () => {
                 </Modal>
 
                 <Modal show={show3} onHide={handleClose3}>
-    <Modal.Header closeButton>
-        <Modal.Title>Adicionar Conta de Banco</Modal.Title>
-    </Modal.Header>
-    <Modal.Body>
-        <Form>
-            <Form.Group className="mb-3" controlId="editBank.ControlName">
-                <Form.Label>Nome do Banco</Form.Label>
-                <Form.Control
-                    type="text"
-                    placeholder="Nome do Banco"
-                    value={newName}
-                    onChange={(e) => setNewName(e.target.value)}
-                />
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="editBank.ControlSaldo">
-                <Form.Label>Saldo conta corrente</Form.Label>
-                <Form.Control
-                    type="number"
-                    placeholder="00,00"
-                    value={newSaldoCorrente}
-                    onChange={(e) => setNewSaldoCorrente(e.target.value)}
-                />
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="editBank.ControlSaldo">
-                <Form.Label>Saldo conta poupança</Form.Label>
-                <Form.Control
-                    type="number"
-                    placeholder="00,00"
-                    value={newSaldoPoupanca}
-                    onChange={(e) => setNewSaldoPoupanca(e.target.value)}
-                />
-            </Form.Group>
-            <Form.Label htmlFor="exampleColorInput">Escolha a cor do Banco</Form.Label>
-            <Form.Control
-                type="color"
-                id="BankColorInput"
-                title="Escolha a cor do Banco"
-                value={newCor}
-                onChange={(e) => setNewCor(e.target.value)}
-            />
-        </Form>
-    </Modal.Body>
-    <Modal.Footer>
-        <Button variant="secondary" onClick={handleClose3}>
-            Cancelar
-        </Button>
-        <Button variant="primary" onClick={handleAddBank}>
-            Salvar
-        </Button>
-    </Modal.Footer>
-</Modal>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Adicionar Conta de Banco</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <Form>
+                            <Form.Group className="mb-3" controlId="editBank.ControlName">
+                                <Form.Label>Nome do Banco</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    placeholder="Nome do Banco"
+                                    value={newName}
+                                    onChange={(e) => setNewName(e.target.value)}
+                                />
+                            </Form.Group>
+                            <Form.Group className="mb-3" controlId="editBank.ControlSaldo">
+                                <Form.Label>Saldo conta corrente</Form.Label>
+                                <Form.Control
+                                    type="number"
+                                    placeholder="00,00"
+                                    value={newSaldoCorrente || 0} // Se o valor for falsy (null, undefined, vazio), define como 0
+                                    onChange={(e) => setNewSaldoCorrente(parseFloat(e.target.value))}
+                                />
+
+                            </Form.Group>
+                            <Form.Group className="mb-3" controlId="editBank.ControlSaldo">
+                                <Form.Label>Saldo conta poupança</Form.Label>
+                                <Form.Control
+                                    type="number"
+                                    placeholder="00,00"
+                                    value={newSaldoPoupanca || 0} // Se o valor for falsy (null, undefined, vazio), define como 0
+                                    onChange={(e) => setNewSaldoPoupanca(parseFloat(e.target.value))}
+                                />
+                            </Form.Group>
+                            <Form.Label htmlFor="exampleColorInput">Escolha a cor do Banco</Form.Label>
+                            <Form.Control
+                                type="color"
+                                id="BankColorInput"
+                                title="Escolha a cor do Banco"
+                                value={newCor || "#000000"} // Se o valor for falsy (null, undefined, vazio), define como #000000
+                                onChange={(e) => setNewCor(e.target.value)}
+                            />
+                        </Form>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={handleClose3}>
+                            Cancelar
+                        </Button>
+                        <Button variant="primary" onClick={handleAddBank}>
+                            Salvar
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
 
 
             </Container>

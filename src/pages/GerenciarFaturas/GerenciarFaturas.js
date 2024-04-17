@@ -327,7 +327,7 @@ const GerenciarFaturas = () => {
                 </Card>
 
                 <Card>
-                    <Card.Body>
+                    <Card.Body className="pb-5">
                         <Form>
                             <p className="title">Pagar Fatura</p>
                             <Form.Label>Qual fatura quer pagar?</Form.Label>
@@ -358,7 +358,7 @@ const GerenciarFaturas = () => {
                                 ))}
                             </Form.Select>
 
-                            <div className="btnGF py-3">
+                            <div className="btnGF py-3 pb-5">
                                 <Button variant="success" onClick={handlePagarFatura}>Pagar fatura</Button>
                             </div>
                         </Form>

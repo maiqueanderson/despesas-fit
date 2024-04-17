@@ -16,7 +16,13 @@
    text-align: center;
     
 }
-
+.bolinha{
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 8px;
+}
 .nav2{
     background-color: #c32722;
     height: 100px;

@@ -14,6 +14,14 @@ const CadReceita = () => {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
+    // Adicione um estado para controlar se a despesa está paga
+    const [recebido, setRecebido] = useState(true); // Padrão: receita recebida
+
+    // Função para lidar com a mudança de estado do switch
+    const handleSwitchChange = () => {
+        setRecebido(!recebido); // Inverte o estado atual
+    };
+
     const navigate = useNavigate();
 
     // eslint-disable-next-line
@@ -28,7 +36,7 @@ const CadReceita = () => {
     const [valorInput, setValorInput] = useState('');
 
     const [catName, setCatName] = useState('');
-    const [catCor, setCatCor] = useState('');
+    const [catCor, setCatCor] = useState('#000000');
 
     const handleAddCategory = async () => {
         if (!catName || !catCor) return;
@@ -59,22 +67,26 @@ const CadReceita = () => {
             const catQuery = query(collection(db, "categoriasRC"), where("name", "==", categoriaSelect));
             const catSnapshot = await getDocs(catQuery);
 
+
             if (!catSnapshot.empty) {
                 const categoriaData = catSnapshot.docs[0].data();
                 const cor = categoriaData.cor;
 
-                // Adicionar despesa à coleção receitas
-                const receitasCollectionRef = collection(db, "receitas");
-                await addDoc(receitasCollectionRef, {
-                    categoria: categoriaSelect,
-                    banco: bancoSelect,
-                    date: new Date(),
-                    valor: valorInput,
-                    uid: user.uid,
-                    cor: cor, // Adiciona a cor obtida da categoria
-                });
 
-                // Subtrair o valor da despesa do saldoCorrente do banco selecionado
+                if (recebido) {
+
+                    // Adicionar a receita à coleção receitas
+                    const receitasCollectionRef = collection(db, "receitas");
+                    await addDoc(receitasCollectionRef, {
+                        categoria: categoriaSelect,
+                        banco: bancoSelect,
+                        date: new Date(),
+                        valor: valorInput,
+                        uid: user.uid,
+                        cor: cor, // Adiciona a cor obtida da categoria
+                    });
+                
+                     // Subtrair o valor da despesa do saldoCorrente do banco selecionado
                 const bancosCollectionRef = collection(db, "bancos");
                 const bancosQuery = query(bancosCollectionRef, where("name", "==", bancoSelect));
                 const bancosSnapshot = await getDocs(bancosQuery);
@@ -101,6 +113,23 @@ const CadReceita = () => {
                 } else {
                     console.error("Documento de banco não encontrado no Firestore.");
                 }
+
+                }else{
+                    // Adicionar à coleção paraReceber
+                    const paraReceberCollectionRef = collection(db, "paraReceber");
+                    await addDoc(paraReceberCollectionRef, {
+                        categoria: categoriaSelect,
+                        banco: bancoSelect,
+                        date: new Date(),
+                        valor: valorInput,
+                        uid: user.uid,
+                        cor: cor, // Adiciona a cor obtida da categoria
+                    });
+    
+                    console.log("Receita não recebida adicionada à coleção paraReceber com sucesso!");
+                    navigate("/Home");
+                }
+               
             } else {
                 console.error("Documento de categoria não encontrado no Firestore.");
             }
@@ -108,6 +137,7 @@ const CadReceita = () => {
             console.error("Erro ao adicionar despesa:", error);
         }
     };
+
 
 
 
@@ -222,8 +252,8 @@ const CadReceita = () => {
                                 <Form.Select
                                     value={bancoSelect}
                                     onChange={(e) => setBancoSelect(e.target.value)}
-                                >   
-                                <option>Selecione um banco</option>
+                                >
+                                    <option>Selecione um banco</option>
                                     {bancos.map((bancos) => (
                                         <option key={bancos.id} value={bancos.name}>
                                             {bancos.name}
@@ -241,6 +271,15 @@ const CadReceita = () => {
                                     onChange={(e) => setValorInput(e.target.value)}
                                 />
                             </Form.Group>
+
+                            <Form.Check
+                                className="py-3"
+                                type="switch"
+                                id="pago"
+                                label="Receita recebida"
+                                defaultChecked={recebido} // Define o estado inicial com base no estado despesaPaga
+                                onChange={handleSwitchChange} // Função para lidar com a mudança de estado
+                            />
 
                         </Form>
                         <div className="despesaPage">

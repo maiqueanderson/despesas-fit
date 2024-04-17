@@ -9,12 +9,13 @@ import './CadDespesa.css'
 import despesaPage from '../../assets/despesaPage.png'
 import { Link } from "react-router-dom";
 
+
 const CadDespesa = () => {
 
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-    
+
 
     const navigate = useNavigate();
 
@@ -34,8 +35,8 @@ const CadDespesa = () => {
     const [bancos, setBancos] = useState([]);
 
     const [catName, setCatName] = useState('');
-    const [catCor, setCatCor] = useState('');
-    const [catMeta, setCatMeta] = useState('');
+    const [catCor, setCatCor] = useState('#000000');
+    const [catMeta, setCatMeta] = useState('0');
 
     const handleAddCategory = async () => {
         if (!catName || !catCor || !catMeta) return;
@@ -61,18 +62,18 @@ const CadDespesa = () => {
         const tipoCompraSelect = document.getElementById("TipoDeCompra").value || "Debito";
         const valorInput = document.getElementById("valorDinheiro").value;
         const despesaName = document.getElementById("nomeDespesa").value || "Despesa sem nome"; // Define o nome padrão como "despesa sem nome" se não houver nenhum nome
-    
+
         if (!categoriaSelect || !bancoSelect || !tipoCompraSelect || !valorInput) return;
-    
+
         try {
             // Consultar o documento da categoria selecionada para obter a cor
             const catQuery = query(collection(db, "categorias"), where("name", "==", categoriaSelect));
             const catSnapshot = await getDocs(catQuery);
-    
+
             if (!catSnapshot.empty) {
                 const categoriaData = catSnapshot.docs[0].data();
                 const cor = categoriaData.cor;
-    
+
                 // Verificar se a despesa está paga
                 if (despesaPaga) {
                     // Adicionar despesa à coleção despesas
@@ -88,23 +89,23 @@ const CadDespesa = () => {
                         cor: cor, // Adiciona a cor obtida da categoria
                         status: "pago"
                     });
-    
+
                     // Subtrair o valor da despesa do saldoCorrente do banco selecionado
                     const bancosCollectionRef = collection(db, "bancos");
                     const bancosQuery = query(bancosCollectionRef, where("name", "==", bancoSelect));
                     const bancosSnapshot = await getDocs(bancosQuery);
-    
+
                     if (!bancosSnapshot.empty) {
                         // Verifica se a coleção não está vazia
                         const bancoDoc = bancosSnapshot.docs[0];
                         const saldoCorrenteAtual = bancoDoc.data().saldoCorrente;
                         const novoSaldoCorrente = saldoCorrenteAtual - parseFloat(valorInput);
-    
+
                         // Atualizar o saldoCorrente no banco selecionado
                         await updateDoc(bancoDoc.ref, {
                             saldoCorrente: novoSaldoCorrente,
                         });
-    
+
                         console.log("Despesa paga adicionada com sucesso!");
                     } else {
                         console.error("Documento de banco não encontrado no Firestore.");
@@ -122,17 +123,17 @@ const CadDespesa = () => {
                         uid: user.uid,
                         cor: cor, // Adiciona a cor obtida da categoria
                     });
-    
+
                     console.log("Despesa não paga adicionada à coleção paraPagar com sucesso!");
                 }
-    
+
                 // Limpar os campos após a adição
                 document.getElementById("CategoriaDespesa").value = "";
                 document.getElementById("BancosDespesa").value = "";
                 document.getElementById("TipoDeCompra").value = "Debito";
                 document.getElementById("valorDinheiro").value = "";
                 document.getElementById("nomeDespesa").value = ""; // Limpar o campo nomeDespesa
-    
+
                 navigate("/Home");
             } else {
                 console.error("Documento de categoria não encontrado no Firestore.");
@@ -141,8 +142,8 @@ const CadDespesa = () => {
             console.error("Erro ao adicionar despesa:", error);
         }
     };
-    
-    
+
+
 
 
 
@@ -241,14 +242,14 @@ const CadDespesa = () => {
                         <Form>
                             <Form.Group className="mb-3" controlId="CategoriaDespesa">
 
-                            <Form.Group className="my-3" controlId="nomeDespesa">
-                                <Form.Label>Nome da despesa:</Form.Label>
-                                <Form.Control type="text" placeholder="Nome opcional" />
-                            </Form.Group>
+                                <Form.Group className="my-3" controlId="nomeDespesa">
+                                    <Form.Label>Nome da despesa:</Form.Label>
+                                    <Form.Control type="text" placeholder="Nome opcional" />
+                                </Form.Group>
 
                                 <Form.Label>Categoria:</Form.Label>
                                 <Form.Select>
-                                <option>Selecione uma categoria</option>
+                                    <option>Selecione uma categoria</option>
                                     {categorias.map((categoria) => (
                                         <option key={categoria.id} value={categoria.name}>
                                             {categoria.name}
@@ -261,14 +262,15 @@ const CadDespesa = () => {
                             <Form.Group className="mb-3" controlId="BancosDespesa">
                                 <Form.Label>Conta de banco:</Form.Label>
                                 <Form.Select>
-                                <option>Selecione um banco</option>
-                                    {bancos.map((bancos) => (
-                                        <option key={bancos.id} value={bancos.name}>
-                                            {bancos.name}
+                                    <option>Selecione um banco</option>
+                                    {bancos.map((banco) => (
+                                        <option key={banco.id} value={banco.name}>
+                                            - {banco.name}
                                         </option>
                                     ))}
                                 </Form.Select>
                             </Form.Group>
+
 
                             <Form.Group className="mb-3" controlId="TipoDeCompra">
                                 <Form.Label>Tipo de Compra:</Form.Label>
@@ -303,50 +305,50 @@ const CadDespesa = () => {
                 </Card>
 
                 <Modal show={show} onHide={handleClose}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Crie uma nova categoria</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Form>
-                        <Form.Group className="mb-3" controlId="editBank.ControlName">
-                            <Form.Label>Nome da categoria</Form.Label>
-                            <Form.Control
-                                type="text"
-                                placeholder="Nome da categoria"
-                                value={catName}
-                                onChange={(e) => setCatName(e.target.value)}
-                            />
-                        </Form.Group>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Crie uma nova categoria</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <Form>
+                            <Form.Group className="mb-3" controlId="editBank.ControlName">
+                                <Form.Label>Nome da categoria</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    placeholder="Nome da categoria"
+                                    value={catName}
+                                    onChange={(e) => setCatName(e.target.value)}
+                                />
+                            </Form.Group>
 
-                        <Form.Group className="mb-3" controlId="editBank.ControlMeta">
-                            <Form.Label>Meta de gastos mensal</Form.Label>
-                            <Form.Control
-                                type="number"
-                                placeholder="R$ 00,00"
-                                value={catMeta}
-                                onChange={(e) => setCatMeta(e.target.value)}
-                            />
-                        </Form.Group>
+                            <Form.Group className="mb-3" controlId="editBank.ControlMeta">
+                                <Form.Label>Meta de gastos mensal</Form.Label>
+                                <Form.Control
+                                    type="number"
+                                    placeholder="R$ 00,00"
+                                    value={catMeta}
+                                    onChange={(e) => setCatMeta(e.target.value)}
+                                />
+                            </Form.Group>
 
-                        <Form.Label htmlFor="exampleColorInput">Escolha a cor da categoria</Form.Label>
-                        <Form.Control
-                            type="color"
-                            id="BankColorInput"
-                            title="Escolha a cor do Banco"
-                            value={catCor}
-                            onChange={(e) => setCatCor(e.target.value)}
-                        />
-                    </Form>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={handleClose}>
-                        Cancelar
-                    </Button>
-                    <Button variant="primary" onClick={handleAddCategory}>
-                        Salvar
-                    </Button>
-                </Modal.Footer>
-            </Modal>
+                            <Form.Label htmlFor="exampleColorInput">Escolha a cor da categoria</Form.Label>
+                            <Form.Control
+                                type="color"
+                                id="BankColorInput"
+                                title="Escolha a cor do Banco"
+                                value={catCor}
+                                onChange={(e) => setCatCor(e.target.value)}
+                            />
+                        </Form>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={handleClose}>
+                            Cancelar
+                        </Button>
+                        <Button variant="primary" onClick={handleAddCategory}>
+                            Salvar
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
 
             </Container>
             <Footer />
