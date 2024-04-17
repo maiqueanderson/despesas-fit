@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { useState, useEffect } from "react";
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import { Container, Form, Row, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
@@ -9,10 +9,14 @@ import imageLogin from '../assets/newUser.png'
 import logo from '../assets/logo2.png'
 import UserCreate from "../auth/UserCreate";
 
+
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+
+  const [user, setUser] = useState(null);
+
 
   const [show, setShow] = useState(false);
   const [UserCreateModal, setUserCreateModal] = useState(false);
@@ -37,8 +41,22 @@ const Login = () => {
     }
   };
 
+  useEffect(() => {
+    const auth = getAuth(app);
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUser(user);
+    });
+  
+    return unsubscribe; // Limpa o listener quando o componente é desmontado
+  }, []);
+  
+
   return (
     <>
+
+{user ? (
+       navigate("/Home")
+    ) : (
       <Container>
       <div className="logo my-2">
           <img className=" my-3" src={logo} height={30} alt="Despesas FIT" />
@@ -120,6 +138,9 @@ const Login = () => {
         </Modal>
 
       </Container>
+    )}
+
+     
     </>
   );
 };
