@@ -17,6 +17,7 @@ import Historico from "./pages/Historico/Historico";
 import HistoricoRec from "./pages/HistoricoRec/HitoricoRec"
 import Graficos from "./pages/Graficos/Graficos";
 import ReceberValor from "./pages/ReceberValor/ReceberValor";
+import AddFatura from "./pages/AddFatura/AddFatura"
 
 
 const App = () => {
@@ -39,6 +40,7 @@ const App = () => {
           <Route path='/HistoricoRec' element={<HistoricoRec />} />
           <Route path='/Graficos' element={<Graficos />} />
           <Route path='/ReceberValor' element={<ReceberValor />} />
+          <Route path='/AddFatura' element={<AddFatura />} />
          
         </Routes>
       </Router>

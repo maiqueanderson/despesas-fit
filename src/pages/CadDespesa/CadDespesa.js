@@ -249,6 +249,7 @@ const CadDespesa = () => {
 
                                 <Form.Label>Categoria:</Form.Label>
                                 <Form.Select>
+                                    
                                     <option>Selecione uma categoria</option>
                                     {categorias.map((categoria) => (
                                         <option key={categoria.id} value={categoria.name}>

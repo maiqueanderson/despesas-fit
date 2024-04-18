@@ -61,9 +61,14 @@ const Faturas = () => {
                         </Col>
                     </Row>
 
-                    <div className="btnF mt-3">
+                    <div className="btnF my-3">
+                        <Link to='/AddFatura'>
+                            <Button variant="outline-success">Adicionar Faturas</Button>
+                        </Link>
+                    </div>
+                    <div className="btnF mb-3">
                         <Link to='/GerenciarFaturas'>
-                            <Button variant="outline-success">Gerenciar Faturas</Button>
+                            <Button variant="success">Pagar Faturas</Button>
                         </Link>
                     </div>
                 </Card.Body>
