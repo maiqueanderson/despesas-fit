@@ -6,6 +6,7 @@ import { app, db } from "../../database/firebaseconfig";
 import { collection, getDocs, doc, getDoc, query, where, updateDoc, deleteDoc, addDoc } from "firebase/firestore";
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import { useNavigate } from "react-router-dom";
 import './GerenciarFaturas.css'
 
 const GerenciarFaturas = () => {
@@ -19,10 +20,11 @@ const GerenciarFaturas = () => {
     const [userFaturaData, setUserFaturaData] = useState(null);
     const [bancos, setBancos] = useState([]);
     const [faturas, setFaturas] = useState([]);
+    const navigate = useNavigate();
 
 
 
-// eslint-disable-next-line
+    // eslint-disable-next-line
     const [bankName, setBankName] = useState("");
 
     const [valorFatura, setValorFatura] = useState(0);
@@ -88,6 +90,7 @@ const GerenciarFaturas = () => {
 
             setBankName("");
             setValorFatura(0);
+            navigate("/Home");
         } catch (error) {
             console.error("Erro ao adicionar despesa:", error);
         }
@@ -159,10 +162,14 @@ const GerenciarFaturas = () => {
                             <Form.Group className="mb-3" controlId="faturaNameSelect">
 
                                 <Form.Label>Qual fatura quer pagar?</Form.Label>
-                                <Form.Select>
-
-
-
+                                <Form.Select
+                                    onChange={(e) => {
+                                        const selectedFatura = faturas.find(fatura => fatura.banco === e.target.value);
+                                        if (selectedFatura) {
+                                            setValorFatura(selectedFatura.valor);
+                                        }
+                                    }}
+                                >
                                     <option>Selecione a fatura</option>
                                     {faturas.map((fatura, index) => (
                                         <option key={index} value={fatura.banco}>
@@ -171,12 +178,15 @@ const GerenciarFaturas = () => {
                                     ))}
                                 </Form.Select>
 
+
                             </Form.Group>
 
                             <Form.Group className="mb-3" controlId="bankNameSelect">
 
                                 <Form.Label>Pagar com saldo de:</Form.Label>
-                                <Form.Select>
+                                <Form.Select
+
+                                >
 
                                     <option>Selecione um banco</option>
                                     {bancos.map((banco, index) => (
@@ -191,7 +201,7 @@ const GerenciarFaturas = () => {
                             </div>
                         </Form>
 
-                        
+
                     </Card.Body>
                 </Card>
 

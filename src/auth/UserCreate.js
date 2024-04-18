@@ -29,16 +29,6 @@ const UserCreate = () => {
             uid: auth.currentUser.uid,
           });
 
-          // const usersBank = collection(db, "bancos");
-          // await setDoc(doc(usersBank, auth.currentUser.uid), {
-          //   name: 'Conta Inicial',
-          //   saldoCorrente: '0',
-          //   saldoPoupanca: '0',
-          //   limiteCartao: '0',
-          //   cor: '#408558',
-          //   uid: auth.currentUser.uid,
-          // });
-
           const usersReceita = collection(db, "categorias");
           await setDoc(doc(usersReceita, auth.currentUser.uid), {
             cor: '#2b1212',
